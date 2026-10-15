@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "core_sha": "340c391cafd7176462ab5adb22b0becee12af5f2",
+  "installation_docs_checked": "2026-10-11",
+  "skills": [
+    {
+      "name": "plainrouter-counted-brief",
+      "version": "0.1.0",
+      "minimum_tier": "read",
+      "zip_bytes": 8149,
+      "zip_sha256": "6fda5e3ce23616a609512a127f629a6c5e6d4aab630d57aa976db64f095e4e42"
+    },
+    {
+      "name": "plainrouter-signal-check",
+      "version": "0.1.0",
+      "minimum_tier": "read",
+      "zip_bytes": 7080,
+      "zip_sha256": "253f1b4b14a92b96724062da12633c4ff9c4fb578d3e9e2488a964f507a04aba"
+    },
+    {
+      "name": "plainrouter-action-review",
+      "version": "0.1.0",
+      "minimum_tier": "read",
+      "zip_bytes": 7685,
+      "zip_sha256": "8e5173abc2fcf9d7bf3439dfdc6a27b2e9be59351ac4edeff250e1e033da525c"
+    },
+    {
+      "name": "plainrouter-test-readout",
+      "version": "0.1.0",
+      "minimum_tier": "read",
+      "zip_bytes": 8025,
+      "zip_sha256": "20e81707b5308d51edd4ebc17ce2539bab2143223779c59274adae2acd8918d6"
+    },
+    {
+      "name": "plainrouter-pause-proposal",
+      "version": "0.1.0",
+      "minimum_tier": "write",
+      "zip_bytes": 10373,
+      "zip_sha256": "9c8f13d27cac5e0e734cc66e7f30fc3a7746050d29a85ae4e74931123205fd32"
+    },
+    {
+      "name": "plainrouter-budget-proposal",
+      "version": "0.1.0",
+      "minimum_tier": "write",
+      "zip_bytes": 10530,
+      "zip_sha256": "2b081a0253c64023d5f53cc783d33929261245275a063a18d0e5fa0c7e2754ff"
+    }
+  ]
+}

@@ -1,0 +1,477 @@
+{
+  "schema_version": 3,
+  "core_sha": "340c391cafd7176462ab5adb22b0becee12af5f2",
+  "protocol_methods": [
+    "tools/list"
+  ],
+  "tools": [
+    {
+      "name": "actions.rules.create",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "actions.rules.store",
+      "sk7": true,
+      "sk7_rules": [
+        "explicit-exclusion"
+      ]
+    },
+    {
+      "name": "actions.rules.list",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "actions.rules.index",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "actions.rules.show",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "actions.rules.show",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "actions.rules.update",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "actions.rules.update",
+      "sk7": true,
+      "sk7_rules": [
+        "explicit-exclusion"
+      ]
+    },
+    {
+      "name": "actions.tests.create",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.plans.store",
+      "sk7": true,
+      "sk7_rules": [
+        "explicit-exclusion"
+      ]
+    },
+    {
+      "name": "actions.tests.list",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launch.plans.index",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "actions.tests.show",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launch.plans.show",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "dry_run_actions",
+      "minimum_tier": "write",
+      "effect": "read",
+      "grant_operation": "propose-actions",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "duplicate-ad-with-creative",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "duplicate-ad-with-creative",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain",
+        "creative-grant"
+      ]
+    },
+    {
+      "name": "get-creative-library",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get-creative-library",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain",
+        "creative-grant"
+      ]
+    },
+    {
+      "name": "get_account_inventory",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get_account_inventory",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_account_state",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get_account_state",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_action",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "read-actions",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_action_batch",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "read-actions",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_action_decision_receipt",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "read-actions",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_action_policy",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "read-actions",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_arrivals_comparison",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get_arrivals_comparison",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_consent_rates",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get_consent_rates",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_cookie_scan",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get_cookie_scan",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_install_instructions",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get_install_instructions",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_inventory_metrics",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get_inventory_metrics",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_performance",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get_performance",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "get_render",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launch.renders.show",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "get_signal_health",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "get_signal_health",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "launch.creatives.index",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launch.creatives.index",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.creatives.show",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launch.creatives.show",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.creatives.status",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.creatives.status",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.creatives.store",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.creatives.store",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.creatives.store-from-url",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.creatives.store-from-url",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.plans.copy",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.plans.store",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.plans.create",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.plans.store",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.plans.execute",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.plans.execute",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.plans.list",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launch.plans.index",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.plans.show",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launch.plans.show",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.plans.update",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.plans.update",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launch.plans.validate",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.plans.validate",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launcher.batch_status",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launcher.batch_status",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "launcher.draft_batch",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launcher.draft_batch",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain",
+        "creative-grant"
+      ]
+    },
+    {
+      "name": "launcher.preview_batch",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launcher.preview_batch",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "list_actions",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "read-actions",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "list_creatives",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launch.creatives.index",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "list_templates",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "launch.templates.index",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "list_workspaces",
+      "minimum_tier": "read",
+      "effect": "read",
+      "grant_operation": "list_workspaces",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "preview_creatives",
+      "minimum_tier": "read",
+      "effect": "write",
+      "grant_operation": "launch.creatives.preview",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "propose-actions",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "propose-actions",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "render_ad",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.renders.store",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "resume_render",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "launch.renders.resume",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain"
+      ]
+    },
+    {
+      "name": "revoke_grant",
+      "minimum_tier": "admin",
+      "effect": "write",
+      "grant_operation": "revoke_grant",
+      "sk7": true,
+      "sk7_rules": [
+        "explicit-exclusion"
+      ]
+    },
+    {
+      "name": "submit_feedback",
+      "minimum_tier": "read",
+      "effect": "write",
+      "grant_operation": "submit_feedback",
+      "sk7": false,
+      "sk7_rules": []
+    },
+    {
+      "name": "upload-asset",
+      "minimum_tier": "write",
+      "effect": "write",
+      "grant_operation": "upload-asset",
+      "sk7": true,
+      "sk7_rules": [
+        "launch-domain",
+        "creative-grant"
+      ]
+    },
+    {
+      "name": "verify_signal_ingestion",
+      "minimum_tier": "read",
+      "effect": "write",
+      "grant_operation": "verify_signal_ingestion",
+      "sk7": false,
+      "sk7_rules": []
+    }
+  ]
+}

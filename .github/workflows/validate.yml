@@ -1,0 +1,66 @@
+name: Validate skills
+on:
+  push:
+    branches: [main]
+  pull_request:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.ref_name == 'main' && format('main-run-{0}', github.run_id) || format('branch-{0}', github.ref_name) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || github.ref_name != 'main' }}
+permissions:
+  contents: read
+jobs:
+  guard:
+    name: Guard and packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GUARD_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - name: Check out exact head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13'
+      - name: Install hash-pinned parser
+        run: 'python -m pip install --only-binary=:all: --require-hashes -r requirements.txt'
+      - name: Test fixed guard fixtures
+        id: coverage
+        run: python tests/test_guard_fixtures.py --report reports/guard.json --head "$GUARD_HEAD"
+      - name: Test bundle and packaging contracts
+        run: python -m unittest discover -s tests -p test_guard_contract.py -v
+      - name: Test required completion gate
+        run: python -m unittest discover -s tests -p test_guard_report.py -v
+      - name: Check concurrency isolation
+        run: python -m unittest discover -s tests -p test_concurrency.py -v
+      - name: Validate frontmatter and tool contract
+        run: python scripts/validate.py
+      - name: Build skill ZIPs
+        run: python scripts/build_zips.py
+      - name: Require complete passing coverage and checks
+        if: always()
+        env:
+          GUARD_RESULT: ${{ steps.coverage.outcome }}
+          CHECKS_RESULT: ${{ job.status }}
+        run: >-
+          python scripts/guard_report.py --report reports/guard.json
+          --head "$GUARD_HEAD" --guard-result "$GUARD_RESULT"
+          --checks-result "$CHECKS_RESULT"
+      - name: Retain guard evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: guard-${{ github.event.pull_request.head.sha || github.sha }}
+          path: reports/guard.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Retain reviewable build artifacts
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: skill-zips-${{ github.event.pull_request.head.sha || github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14

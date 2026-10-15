@@ -1,0 +1,3974 @@
+{
+  "schema_version": 1,
+  "forms": {
+    "1": "plain, code and emphasis",
+    "2": "HTML elements, comments and attributes",
+    "3": "links and block constructs",
+    "4": "punctuation and structured values",
+    "5": "punctuation escapes",
+    "6": "character references",
+    "7": "JSON Unicode escapes",
+    "8": "inline markup splits",
+    "9": "format characters",
+    "10": "letter case",
+    "11": "joined and overlapping names",
+    "12": "raw HTML rejection forms",
+    "13": "literal HTML control forms",
+    "14": "ASCII rejection forms",
+    "15": "ASCII control forms",
+    "16": "consumed definitions and cells",
+    "17": "consumed-text control forms",
+    "18": "full fence info and paired collectors"
+  },
+  "fixtures": [
+    {
+      "id": "F01-A",
+      "form": 1,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "```json\n{\"x\":\"caf\\u00e9\"}\n```"
+    },
+    {
+      "id": "F01-N",
+      "form": 1,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json\n{\"x\":\"submit\\u005ffeedback\"}\n```",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F01-AP",
+      "form": 1,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "`Facts &eacute;`"
+    },
+    {
+      "id": "F01-NP",
+      "form": 1,
+      "check": "name",
+      "expected": "pass",
+      "text": "`Facts &eacute;`"
+    },
+    {
+      "id": "F02-A",
+      "form": 2,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "<span data-note=\"caf&eacute;\">Facts</span>"
+    },
+    {
+      "id": "F02-N",
+      "form": 2,
+      "check": "name",
+      "expected": "reject",
+      "text": "<span data-tool=\"submit&#95;feedback\">Facts</span>",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F02-AP",
+      "form": 2,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "<span data-note=\"Facts\">Facts</span>"
+    },
+    {
+      "id": "F02-NP",
+      "form": 2,
+      "check": "name",
+      "expected": "pass",
+      "text": "<span data-note=\"Facts\">Facts</span>"
+    },
+    {
+      "id": "F03-A",
+      "form": 3,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[shown](https://example.invalid/caf&eacute;)"
+    },
+    {
+      "id": "F03-N",
+      "form": 3,
+      "check": "name",
+      "expected": "reject",
+      "text": "[shown](https://example.invalid/ \"submit&#95;feedback\")",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F03-AP",
+      "form": 3,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[shown](https://example.invalid/facts)"
+    },
+    {
+      "id": "F03-NP",
+      "form": 3,
+      "check": "name",
+      "expected": "pass",
+      "text": "[shown](https://example.invalid/facts)"
+    },
+    {
+      "id": "F04-A",
+      "form": 4,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "{\"value\":\"caf\\u00e9\"}"
+    },
+    {
+      "id": "F04-N",
+      "form": 4,
+      "check": "name",
+      "expected": "reject",
+      "text": "{\"method\":\"tools/call\",\"params\":{\"name\":\"submit\\u005ffeedback\"}}",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F04-AP",
+      "form": 4,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "tool: \"facts\""
+    },
+    {
+      "id": "F04-NP",
+      "form": 4,
+      "check": "name",
+      "expected": "pass",
+      "text": "tool: \"facts\""
+    },
+    {
+      "id": "F05-A",
+      "form": 5,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "`caf\\u00e9`"
+    },
+    {
+      "id": "F05-N",
+      "form": 5,
+      "check": "name",
+      "expected": "reject",
+      "text": "```text\nsubmit\\_feedback\n```",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F05-AP",
+      "form": 5,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts \\*plain\\*."
+    },
+    {
+      "id": "F05-NP",
+      "form": 5,
+      "check": "name",
+      "expected": "pass",
+      "text": "Facts \\*plain\\*."
+    },
+    {
+      "id": "F06-A",
+      "form": 6,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts &eacute;"
+    },
+    {
+      "id": "F06-N",
+      "form": 6,
+      "check": "name",
+      "expected": "reject",
+      "text": "Facts submit&lowbar;feedback",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F06-AP",
+      "form": 6,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts &amp;region"
+    },
+    {
+      "id": "F06-NP",
+      "form": 6,
+      "check": "name",
+      "expected": "pass",
+      "text": "Facts &amp;region"
+    },
+    {
+      "id": "F07-A",
+      "form": 7,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \\u00e9"
+    },
+    {
+      "id": "F07-N",
+      "form": 7,
+      "check": "name",
+      "expected": "reject",
+      "text": "Facts submit\\u005ffeedback",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F07-AP",
+      "form": 7,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts \\u0041"
+    },
+    {
+      "id": "F07-NP",
+      "form": 7,
+      "check": "name",
+      "expected": "pass",
+      "text": "Facts \\u0041"
+    },
+    {
+      "id": "F08-A",
+      "form": 8,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "caf*&eacute;*"
+    },
+    {
+      "id": "F08-N",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then submit*_*feedback.",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F08-AP",
+      "form": 8,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts *plain*."
+    },
+    {
+      "id": "F08-NP",
+      "form": 8,
+      "check": "name",
+      "expected": "pass",
+      "text": "Facts *plain*."
+    },
+    {
+      "id": "F09-A",
+      "form": 9,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \\u200b"
+    },
+    {
+      "id": "F09-N",
+      "form": 9,
+      "check": "name",
+      "expected": "reject",
+      "text": "```text\nsubmit\\u200b_feedback\n```",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F09-AP",
+      "form": 9,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts plain."
+    },
+    {
+      "id": "F09-NP",
+      "form": 9,
+      "check": "name",
+      "expected": "pass",
+      "text": "Facts plain."
+    },
+    {
+      "id": "F10-A",
+      "form": 10,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "CAF\\u00E9"
+    },
+    {
+      "id": "F10-N",
+      "form": 10,
+      "check": "name",
+      "expected": "reject",
+      "text": "SUBMIT_FEEDBACK",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F10-AP",
+      "form": 10,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "PLAIN FACTS."
+    },
+    {
+      "id": "F10-NP",
+      "form": 10,
+      "check": "name",
+      "expected": "pass",
+      "text": "PLAIN FACTS."
+    },
+    {
+      "id": "F11-A",
+      "form": 11,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \\u00e9.get_action_batch"
+    },
+    {
+      "id": "F11-N",
+      "form": 11,
+      "check": "name",
+      "expected": "reject",
+      "text": "propose-actions.tests.create",
+      "names": [
+        "actions.tests.create"
+      ]
+    },
+    {
+      "id": "F11-AP",
+      "form": 11,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "get_action_batch"
+    },
+    {
+      "id": "F11-NP",
+      "form": 11,
+      "check": "name",
+      "expected": "pass",
+      "text": "get_action_batch"
+    },
+    {
+      "id": "F12-A",
+      "form": 12,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "<span>caf&eacute;</span>"
+    },
+    {
+      "id": "F12-N",
+      "form": 12,
+      "check": "name",
+      "expected": "reject",
+      "text": "<b data-tool=\"submit&#95;feedback\">Facts</b>",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F12-AP",
+      "form": 12,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "<b>Facts</b>"
+    },
+    {
+      "id": "F12-NP",
+      "form": 12,
+      "check": "name",
+      "expected": "pass",
+      "text": "<b>Facts</b>"
+    },
+    {
+      "id": "F13-A",
+      "form": 13,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "`<span title=\"\\u00e9\">Facts</span>`"
+    },
+    {
+      "id": "F13-N",
+      "form": 13,
+      "check": "name",
+      "expected": "reject",
+      "text": "`submit<span title=\"a>b\">_feedback`",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F13-AP",
+      "form": 13,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "`<span>Facts &eacute;</span>`"
+    },
+    {
+      "id": "F13-NP",
+      "form": 13,
+      "check": "name",
+      "expected": "pass",
+      "text": "`<span>Facts &eacute;</span>`"
+    },
+    {
+      "id": "F14-A",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \u034f"
+    },
+    {
+      "id": "F14-N",
+      "form": 14,
+      "check": "name",
+      "expected": "reject",
+      "text": "submit_feedback",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F14-AP",
+      "form": 14,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts\tand receipts.\n"
+    },
+    {
+      "id": "F14-NP",
+      "form": 14,
+      "check": "name",
+      "expected": "pass",
+      "text": "Facts\tand receipts.\n"
+    },
+    {
+      "id": "F15-A",
+      "form": 15,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \\u200b"
+    },
+    {
+      "id": "F15-N",
+      "form": 15,
+      "check": "name",
+      "expected": "reject",
+      "text": "submit\\u005ffeedback",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F15-AP",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts &#65; &#9; &#10;"
+    },
+    {
+      "id": "F15-NP",
+      "form": 15,
+      "check": "name",
+      "expected": "pass",
+      "text": "Facts &#65; &#9; &#10;"
+    },
+    {
+      "id": "F16-A",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[unused]: /caf&eacute;"
+    },
+    {
+      "id": "F16-N",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[unused]: /submit&#95;feedback",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F16-AP",
+      "form": 16,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[unused]: /facts"
+    },
+    {
+      "id": "F16-NP",
+      "form": 16,
+      "check": "name",
+      "expected": "pass",
+      "text": "[unused]: /facts"
+    },
+    {
+      "id": "F17-A",
+      "form": 17,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | caf&eacute; |"
+    },
+    {
+      "id": "F17-N",
+      "form": 17,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | submit&#95;feedback |",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F17-AP",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| x | `caf&eacute;` |"
+    },
+    {
+      "id": "F17-NP",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| x | `caf&eacute;` |"
+    },
+    {
+      "id": "F18-A",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "```json caf&eacute;\nx\n```"
+    },
+    {
+      "id": "F18-N",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&#95;feedback\nx\n```",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "F18-AP",
+      "form": 18,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "```json facts\nx\n```"
+    },
+    {
+      "id": "F18-NP",
+      "form": 18,
+      "check": "name",
+      "expected": "pass",
+      "text": "```json facts\nx\n```"
+    },
+    {
+      "id": "R2-K-01",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span style=\"d\\isplay:none\">x</span>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E1 css-escaped property d\\isplay:none"
+    },
+    {
+      "id": "R2-K-02",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span style=\"display:n\\one\">x</span>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E2 css-escaped value n\\one"
+    },
+    {
+      "id": "R2-K-03",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<span style=\"display:\\6e one\">x</span>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility E3 hex-escaped value \\6e one"
+    },
+    {
+      "id": "R2-K-04",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span style=\"display : none ! IMPORTANT\">x</span>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E4 !important spaced"
+    },
+    {
+      "id": "R2-K-05",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<span STYLE=\"DISPLAY:NONE\">x</span>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility E5 DISPLAY:NONE upper"
+    },
+    {
+      "id": "R2-K-06",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span style=\"display:none!important;display:inline\">x</span>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E6 later !important wins"
+    },
+    {
+      "id": "R2-K-07",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span style=\"visibility:hidden\">x</span>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E7 visibility:hidden (keeps gap)"
+    },
+    {
+      "id": "R2-K-08",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<span style=\"visibility:collapse\">x</span>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility E8 visibility:collapse (keeps gap)"
+    },
+    {
+      "id": "R2-K-09",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span hidden=\"until-found\">x</span>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E9 hidden=until-found"
+    },
+    {
+      "id": "R2-K-10",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<span hidden><b><i>x</i></b></span>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility E10 nested hidden"
+    },
+    {
+      "id": "R2-K-11",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call re<span hidden>x</span>vo<span style=\"display:none\">y</span>ke<rp>z</rp>_grant.",
+      "finding": "PR2 raw HTML reader/visibility E11 mixed hidden+visible parts"
+    },
+    {
+      "id": "R2-K-12",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span>x</span hidden>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E12 hidden on closing tag (no effect)"
+    },
+    {
+      "id": "R2-K-13",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call <i>revo<b hidden></i>x</b>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E13 reconstructed hidden formatting element"
+    },
+    {
+      "id": "R2-K-14",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call <em>submit<b style=\"display:none\"></em>x</b>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility E14 reconstructed display:none formatting element"
+    },
+    {
+      "id": "R2-K-15",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call <strong>revo<a hidden></strong>x</a>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E15 reconstructed hidden <a>"
+    },
+    {
+      "id": "R2-K-16",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<div><span>revo<div hidden>x</div>ke_grant</span></div>",
+      "finding": "PR2 raw HTML reader/visibility E16 hidden block inside inline (HTML block)"
+    },
+    {
+      "id": "R2-K-17",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<br hidden>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility E17 <br hidden>"
+    },
+    {
+      "id": "R2-K-18",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<template>x</template>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility E18 template middle"
+    },
+    {
+      "id": "R2-K-19",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<p>revo</p><p hidden>x</p><p>ke_grant</p>",
+      "finding": "PR2 raw HTML reader/visibility E19 view-2 removal at block boundary"
+    },
+    {
+      "id": "R2-K-20",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "| a | b |\n| --- | --- |\n| submit<span hidden>x</span> | _feedback |",
+      "finding": "PR2 raw HTML reader/visibility E20 hidden in table cell split across cells"
+    },
+    {
+      "id": "R2-K-21",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<div><span>revo<span hidden>x</span>ke_grant</span></div>",
+      "finding": "PR2 raw HTML reader/visibility E21 hidden spans whole cell boundary (inline)"
+    },
+    {
+      "id": "R2-K-22",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span style=\"font-size:0\">x</span>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility U1 font-size:0"
+    },
+    {
+      "id": "R2-K-23",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<span style=\"position:absolute;left:-9999px\">x</span>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility U2 offscreen absolute"
+    },
+    {
+      "id": "R2-K-24",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<noscript>x</noscript>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility U3 noscript"
+    },
+    {
+      "id": "R2-K-25",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<datalist>x</datalist>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility U4 datalist"
+    },
+    {
+      "id": "R2-K-26",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<audio>x</audio>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility U5 audio without controls"
+    },
+    {
+      "id": "R2-K-27",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<canvas width=\"0\" height=\"0\">x</canvas>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility U6 canvas 0x0"
+    },
+    {
+      "id": "R2-K-28",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<svg width=\"0\" height=\"0\"><text>x</text></svg>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility U7 svg 0x0 text"
+    },
+    {
+      "id": "R2-K-29",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<math><semantics><mi></mi><annotation>x</annotation></semantics></math>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility U8 math annotation"
+    },
+    {
+      "id": "R2-K-30",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<div><span>revo<dialog>x</dialog>ke_grant</span></div>",
+      "finding": "PR2 raw HTML reader/visibility U9 closed dialog in inline (HTML block)"
+    },
+    {
+      "id": "R2-K-31",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<div><span>submit<details>x</details>_feedback</span></div>",
+      "finding": "PR2 raw HTML reader/visibility U10 closed details in inline (HTML block)"
+    },
+    {
+      "id": "R2-K-32",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<ruby>ke<rt>x</rt></ruby>_grant.",
+      "finding": "PR2 raw HTML reader/visibility U11 ruby rt annotation"
+    },
+    {
+      "id": "R2-K-33",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<span style=\"display:inline-block;width:0;overflow:hidden\">x</span>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility U12 inline-block width 0"
+    },
+    {
+      "id": "R2-K-34",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span style=\"position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)\">x</span>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility U13 sr-only clip"
+    },
+    {
+      "id": "R2-K-35",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<span style=\"opacity:0\">x</span>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility U14 opacity:0 (keeps gap)"
+    },
+    {
+      "id": "R2-K-36",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<select><option>x</option></select>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility U15 select/option widget"
+    },
+    {
+      "id": "R2-K-37",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<svg width=\"300\" height=\"30\"><text x=\"0\" y=\"20\">revoke_grant</text></svg>",
+      "finding": "PR2 raw HTML reader/visibility S1 svg text name"
+    },
+    {
+      "id": "R2-K-38",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<svg width=\"300\" height=\"30\"><text x=\"0\" y=\"20\">submit<tspan>_feedback</tspan></text></svg>",
+      "finding": "PR2 raw HTML reader/visibility S2 svg tspan split"
+    },
+    {
+      "id": "R2-K-39",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<math><mtext>revoke_grant</mtext></math>",
+      "finding": "PR2 raw HTML reader/visibility S3 mathml mtext"
+    },
+    {
+      "id": "R2-K-40",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<details><summary>submit_feedback</summary>x</details>",
+      "finding": "PR2 raw HTML reader/visibility S4 summary text"
+    },
+    {
+      "id": "R2-K-41",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<details open><summary>s</summary>revo<span hidden>x</span>ke_grant</details>",
+      "finding": "PR2 raw HTML reader/visibility S5 details open + hidden split"
+    },
+    {
+      "id": "R2-K-42",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<details><summary>s</summary>submit_feedback</details>",
+      "finding": "PR2 raw HTML reader/visibility S6 closed details content (not visible)"
+    },
+    {
+      "id": "R2-K-43",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<head>\n\nUse `<span title=\"` then call revo<b title=\">\">ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility H1 <head> then O2 split"
+    },
+    {
+      "id": "R2-K-44",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<head>\n\nThen call revo<!-- x -->ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility H3 <head> then comment split"
+    },
+    {
+      "id": "R2-K-45",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Intro <head> text.\n\nThen call submit<?x?>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility H4 inline <head> then PI split"
+    },
+    {
+      "id": "R2-K-46",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<span hidden>x</span>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility X1 hidden attr middle"
+    },
+    {
+      "id": "R2-K-47",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call submit<span style=\"display:none\">x</span>_feedback.",
+      "finding": "PR2 raw HTML reader/visibility X2 display:none middle"
+    },
+    {
+      "id": "R2-K-48",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then call revo<rp>x</rp>ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility X3 rp middle"
+    },
+    {
+      "id": "R2-K-49",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<template>\n\nThen call revo<!-- x -->ke_grant.",
+      "finding": "PR2 raw HTML reader/visibility T6 template then comment split"
+    },
+    {
+      "id": "R2-K-50",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then submit<span style=\"visibility:hidden\">later</span>_feedback rows.",
+      "finding": "PR2 raw HTML reader/visibility F1 visibility:hidden word between"
+    },
+    {
+      "id": "R2-K-51",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then submit<span style=\"opacity:0\">later</span>_feedback rows.",
+      "finding": "PR2 raw HTML reader/visibility F2 opacity:0 word between"
+    },
+    {
+      "id": "R2-K-52",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Then submit <span hidden>later</span> _feedback rows.",
+      "finding": "PR2 raw HTML reader/visibility F3 hidden word with spaces"
+    },
+    {
+      "id": "R2-K-53",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Use the <span style=\"display:none\">internal</span> list actions page.",
+      "finding": "PR2 raw HTML reader/visibility F4 display:none word with spaces"
+    },
+    {
+      "id": "R2-K-54",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<p>submit</p><p hidden>x</p><p>_feedback</p>",
+      "finding": "PR2 raw HTML reader/visibility F5 hidden between block paragraphs"
+    },
+    {
+      "id": "R2-L-01",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then call revo*ke*_grant.",
+      "finding": "PR2 closing check 4 M1 emphasis split",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-02",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then call **submit**_feedback.",
+      "finding": "PR2 closing check 4 M2 strong split",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-03",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then call `revo`ke_grant.",
+      "finding": "PR2 closing check 4 M3 code span split",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-04",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then call ~~submit~~_feedback.",
+      "finding": "PR2 closing check 4 M4 strikethrough split",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-05",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then call revo[ke_grant](https://example.invalid/).",
+      "finding": "PR2 closing check 4 M5 link split",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-06",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "![submit**_feedback**](https://example.invalid/i.png)",
+      "finding": "PR2 closing check 4 M6 image alt split",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-07",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| revo*ke*_grant |",
+      "finding": "PR2 closing check 4 M7 table cell inline",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-08",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "## Then *submit*_feedback",
+      "finding": "PR2 closing check 4 M8 heading",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-09",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "- a\n  - > revo`ke`_grant",
+      "finding": "PR2 closing check 4 M9 nested list + quote",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-10",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Text[^submit_feedback].",
+      "finding": "PR2 closing check 4 M10 footnote literal (off)",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-11",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then call revoke\\_grant.",
+      "finding": "PR2 closing check 4 M11 escape",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-12",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then call submit&#95;feedback.",
+      "finding": "PR2 closing check 4 M12 char ref",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-13",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then call revoke&lowbar;grant.",
+      "finding": "PR2 closing check 4 M13 named entity",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-14",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "See https://example.invalid/submit_feedback now.",
+      "finding": "PR2 closing check 4 M14 URL autolink",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-15",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "See www.example.invalid/revoke_grant now.",
+      "finding": "PR2 closing check 4 M15 www autolink",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-16",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Mail submit_feedback@example.invalid now.",
+      "finding": "PR2 closing check 4 M16 email autolink",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-17",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "See <https://example.invalid/revoke_grant>.",
+      "finding": "PR2 closing check 4 M17 angle autolink",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-18",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "[x](https://example.invalid/ \"submit_feedback\")",
+      "finding": "PR2 closing check 4 M18 link title",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-19",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "[x][r]\n\n[r]: https://example.invalid/revoke_grant",
+      "finding": "PR2 closing check 4 M19 ref definition used",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-20",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "- [ ] submit*_*feedback",
+      "finding": "PR2 closing check 4 M20 task item",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-21",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "revo**ke**_grant\n---",
+      "finding": "PR2 closing check 4 M21 setext heading split",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-22",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "{\"tool\":\"submit\\u005ffeedback\"}",
+      "finding": "PR2 closing check 4 M22 JSON \\u escape (form 7)",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R2-L-23",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo\u200bke_grant.",
+      "finding": "PR2 closing check 4 M23 ZWSP (form 9)"
+    },
+    {
+      "id": "R2-L-24",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call submit\u00ad_feedback.",
+      "finding": "PR2 closing check 4 M24 soft hyphen (form 9)"
+    },
+    {
+      "id": "R2-L-25",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then call REVOKE_Grant.",
+      "finding": "PR2 closing check 4 M25 case (form 10)",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R2-L-26",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo\u034fke_grant.",
+      "finding": "PR2 closing check 4 I1 CGJ U+034F"
+    },
+    {
+      "id": "R2-L-27",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call submit\ufe0f_feedback.",
+      "finding": "PR2 closing check 4 I2 VS16 U+FE0F"
+    },
+    {
+      "id": "R2-L-28",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo\ufe00ke_grant.",
+      "finding": "PR2 closing check 4 I3 VS1 U+FE00"
+    },
+    {
+      "id": "R2-L-29",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call submit\udb40\udd00_feedback.",
+      "finding": "PR2 closing check 4 I4 VS17 U+E0100"
+    },
+    {
+      "id": "R2-L-30",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo\u115fke_grant.",
+      "finding": "PR2 closing check 4 I5 Hangul choseong filler U+115F"
+    },
+    {
+      "id": "R2-L-31",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call submit\u1160_feedback.",
+      "finding": "PR2 closing check 4 I6 Hangul jungseong filler U+1160"
+    },
+    {
+      "id": "R2-L-32",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo\u3164ke_grant.",
+      "finding": "PR2 closing check 4 I7 Hangul filler U+3164"
+    },
+    {
+      "id": "R2-L-33",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call submit\uffa0_feedback.",
+      "finding": "PR2 closing check 4 I8 halfwidth Hangul filler U+FFA0"
+    },
+    {
+      "id": "R2-L-34",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo\u17b4ke_grant.",
+      "finding": "PR2 closing check 4 I9 Khmer inherent vowel U+17B4"
+    },
+    {
+      "id": "R2-L-35",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call submit\u180b_feedback.",
+      "finding": "PR2 closing check 4 I10 Mongolian FVS1 U+180B"
+    },
+    {
+      "id": "R2-L-36",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo&#x34F;ke_grant.",
+      "finding": "PR2 closing check 4 I11 CGJ as entity &#x34F;"
+    },
+    {
+      "id": "R2-L-37",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call submit&#xFE0F;_feedback.",
+      "finding": "PR2 closing check 4 I12 VS16 as entity"
+    },
+    {
+      "id": "R2-L-38",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call \u202etnarg_ekover\u202c.",
+      "finding": "PR2 closing check 4 B1 RLO reversed name"
+    },
+    {
+      "id": "R2-L-39",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call &#x202E;kcabdeef_timbus&#x202C;.",
+      "finding": "PR2 closing check 4 B2 RLO via entity"
+    },
+    {
+      "id": "R2-L-40",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call \u2067tnarg_ekover\u2069.",
+      "finding": "PR2 closing check 4 B3 RLI isolate (no override)"
+    },
+    {
+      "id": "R2-L-41",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo\bke_grant.",
+      "finding": "PR2 closing check 4 C1 U+0008 backspace"
+    },
+    {
+      "id": "R2-L-42",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call submit\u001b_feedback.",
+      "finding": "PR2 closing check 4 C2 U+001B escape"
+    },
+    {
+      "id": "R2-L-43",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo\u007fke_grant.",
+      "finding": "PR2 closing check 4 C3 U+007F delete"
+    },
+    {
+      "id": "R2-L-44",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call submit\u0090_feedback.",
+      "finding": "PR2 closing check 4 C4 U+0090 C1"
+    },
+    {
+      "id": "R2-L-45",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call revo&#x8;ke_grant.",
+      "finding": "PR2 closing check 4 C5 &#x8; entity"
+    },
+    {
+      "id": "R2-L-46",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call propose\u2010actions.",
+      "finding": "PR2 closing check 4 L1 U+2010 hyphen lookalike"
+    },
+    {
+      "id": "R2-L-47",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Then call \uff53ubmit_feedback.",
+      "finding": "PR2 closing check 4 L2 fullwidth s"
+    },
+    {
+      "id": "R2-HTML-01",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Note <span>Facts.",
+      "finding": "PR2 raw HTML grammar inline-open"
+    },
+    {
+      "id": "R2-HTML-02",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Note </span>Facts.",
+      "finding": "PR2 raw HTML grammar inline-close"
+    },
+    {
+      "id": "R2-HTML-03",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Note <!-- Facts --> here.",
+      "finding": "PR2 raw HTML grammar inline-comment"
+    },
+    {
+      "id": "R2-HTML-04",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Note <?fixture?> here.",
+      "finding": "PR2 raw HTML grammar inline-PI"
+    },
+    {
+      "id": "R2-HTML-05",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Note <!FIXTURE Facts> here.",
+      "finding": "PR2 raw HTML grammar inline-declaration"
+    },
+    {
+      "id": "R2-HTML-06",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "Note <![CDATA[Facts]]> here.",
+      "finding": "PR2 raw HTML grammar inline-CDATA"
+    },
+    {
+      "id": "R2-HTML-07",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<script>\nFacts\n</script>",
+      "finding": "PR2 raw HTML grammar block-1"
+    },
+    {
+      "id": "R2-HTML-08",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<!-- Facts -->",
+      "finding": "PR2 raw HTML grammar block-2"
+    },
+    {
+      "id": "R2-HTML-09",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<?fixture?>",
+      "finding": "PR2 raw HTML grammar block-3"
+    },
+    {
+      "id": "R2-HTML-10",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<!FIXTURE>",
+      "finding": "PR2 raw HTML grammar block-4"
+    },
+    {
+      "id": "R2-HTML-11",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<![CDATA[Facts]]>",
+      "finding": "PR2 raw HTML grammar block-5"
+    },
+    {
+      "id": "R2-HTML-12",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<div>\nFacts\n</div>",
+      "finding": "PR2 raw HTML grammar block-6"
+    },
+    {
+      "id": "R2-HTML-13",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "<custom-widget>\n\nFacts.",
+      "finding": "PR2 raw HTML grammar block-7"
+    },
+    {
+      "id": "C-HTML-inline",
+      "form": 13,
+      "check": "html",
+      "expected": "pass",
+      "text": "`<span>Facts</span>`"
+    },
+    {
+      "id": "C-HTML-fence",
+      "form": 13,
+      "check": "html",
+      "expected": "pass",
+      "text": "```html\n<span>Facts</span>\n```"
+    },
+    {
+      "id": "C-HTML-autolink",
+      "form": 13,
+      "check": "html",
+      "expected": "pass",
+      "text": "<https://example.invalid/facts>"
+    },
+    {
+      "id": "C-HTML-prose",
+      "form": 13,
+      "check": "html",
+      "expected": "pass",
+      "text": "a < b > c"
+    },
+    {
+      "id": "C-HTML-placeholder",
+      "form": 13,
+      "check": "html",
+      "expected": "pass",
+      "text": "<workspace_id>"
+    },
+    {
+      "id": "C-HTML-escaped",
+      "form": 13,
+      "check": "html",
+      "expected": "pass",
+      "text": "An escaped \\<tag>."
+    },
+    {
+      "id": "C-HTML-generics",
+      "form": 13,
+      "check": "html",
+      "expected": "pass",
+      "text": "`Map<string, Array<Row>>`"
+    },
+    {
+      "id": "R3-DEF-01",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 REVIEW-1 R1 unused ref def dest e-acute"
+    },
+    {
+      "id": "R3-DEF-02",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/ \"caf&eacute;\"",
+      "finding": "PR3 REVIEW-1 R2 unused ref def title e-acute"
+    },
+    {
+      "id": "R3-DEF-03",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/&#x202E;tnarg_ekover",
+      "finding": "PR3 REVIEW-1 R3 unused ref def dest RLO"
+    },
+    {
+      "id": "R3-DEF-04",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/ \"Facts &#x34F;\"",
+      "finding": "PR3 REVIEW-1 R4 unused ref def title U+034F"
+    },
+    {
+      "id": "R3-DEF-05",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[x][r]\n\n[r]: https://example.invalid/a\n[r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 REVIEW-1 R5 duplicate ref def (second ignored)"
+    },
+    {
+      "id": "R3-DEF-06",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "> [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 REVIEW-1 R6 unused ref def in blockquote"
+    },
+    {
+      "id": "R3-DEF-07",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 REVIEW-1 R7 unused ref def in list item"
+    },
+    {
+      "id": "R3-DEF-08",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[caf&#xe9;]: https://example.invalid/",
+      "finding": "PR3 REVIEW-1 R8 unused ref def label e-acute"
+    },
+    {
+      "id": "R3-DEF-09",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[^n]: caf&#xe9;",
+      "finding": "PR3 REVIEW-1 R9 unreferenced footnote def e-acute"
+    },
+    {
+      "id": "R3-DEF-10",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[^n]: &#x202E;tnarg_ekover",
+      "finding": "PR3 REVIEW-1 R10 unreferenced footnote def U+202E"
+    },
+    {
+      "id": "R3-DEF-11",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[x][r]\n\n[r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 REVIEW-1 R11 used ref def e-acute (control: should reject)"
+    },
+    {
+      "id": "R3-DEF-12",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Text[^n].\n\n[^n]: caf&#xe9;",
+      "finding": "PR3 REVIEW-1 R12 referenced footnote def e-acute (control: should reject)"
+    },
+    {
+      "id": "R3-DEF-13",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/caf\\u00e9",
+      "finding": "PR3 REVIEW-1 R13 unused ref def dest raw JSON escape (control)"
+    },
+    {
+      "id": "R3-DEF-14",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/ \"a&#x8;b\"",
+      "finding": "PR3 REVIEW-1 R14 unused ref def C0 &#x8;"
+    },
+    {
+      "id": "R3-DEF-15",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[x][r]\n\n[r]: https://example.invalid/submit&#95;feedback",
+      "finding": "PR3 REVIEW-1 D6 used ref def url ref",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-DEF-16",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[x][r]\n\n[r]: https://example.invalid/ \"submit&#95;feedback\"",
+      "finding": "PR3 REVIEW-1 D7 used ref def title ref",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-DEF-17",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[submit&#95;feedback]\n\n[submit&#95;feedback]: https://example.invalid/",
+      "finding": "PR3 REVIEW-1 D13 shortcut ref label",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-001",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | caf&#xe9; |",
+      "finding": "PR3 closing check 1 T01 discarded cell entity e-acute"
+    },
+    {
+      "id": "R3-C-002",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | submit&#95;feedback |",
+      "finding": "PR3 closing check 1 T02 discarded cell entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-003",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | *submit*&#95;feedback |",
+      "finding": "PR3 closing check 1 T03 discarded cell emphasis+entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-004-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| x | `caf&#xe9;` |",
+      "finding": "PR3 closing check 1 control T04 discarded cell code span entity (literal)"
+    },
+    {
+      "id": "R3-C-004-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| x | `caf&#xe9;` |",
+      "finding": "PR3 closing check 1 control T04 discarded cell code span entity (literal)"
+    },
+    {
+      "id": "R3-C-005",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | [y](https://example.invalid/caf&#xe9;) |",
+      "finding": "PR3 closing check 1 T05 discarded cell link dest entity"
+    },
+    {
+      "id": "R3-C-006",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | [y](https://example.invalid/ \"submit&#95;feedback\") |",
+      "finding": "PR3 closing check 1 T06 discarded cell link title name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-007",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | p\\|caf&#xe9; |",
+      "finding": "PR3 closing check 1 T07 discarded cell escaped pipe + entity"
+    },
+    {
+      "id": "R3-C-008",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "> | a |\n> | --- |\n> | x | caf&#xe9; |",
+      "finding": "PR3 closing check 1 T08 discarded cells in blockquote"
+    },
+    {
+      "id": "R3-C-009",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- | a |\n  | --- |\n  | x | caf&#xe9; |",
+      "finding": "PR3 closing check 1 T09 discarded cells in list item"
+    },
+    {
+      "id": "R3-C-010",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": ">\t| a |\n>\t| --- |\n>\t| x | caf&#xe9; |",
+      "finding": "PR3 closing check 1 T10 discarded cells, tab after quote marker"
+    },
+    {
+      "id": "R3-C-011",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "   | a |\n   | --- |\n   | x | caf&#xe9; |",
+      "finding": "PR3 closing check 1 T11 discarded cells, 3-space indent"
+    },
+    {
+      "id": "R3-C-012",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "a\n---|\nx | y | caf&#xe9;",
+      "finding": "PR3 closing check 1 T12 no leading pipe, 2 discarded"
+    },
+    {
+      "id": "R3-C-013",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- caf&#xe9; |",
+      "finding": "PR3 closing check 1 T13 delimiter row with entity (not a table)"
+    },
+    {
+      "id": "R3-C-014",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | x | caf&#xe9; |",
+      "finding": "PR3 closing check 1 T14 wide row 200 cells, last non-ASCII"
+    },
+    {
+      "id": "R3-C-015",
+      "form": 12,
+      "check": "html",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | <b>y</b> |",
+      "finding": "PR3 closing check 1 T15 discarded cell raw HTML"
+    },
+    {
+      "id": "R3-C-016",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | [y][r] |\n\n[r]: https://example.invalid/submit&#95;feedback",
+      "finding": "PR3 closing check 1 T16 discarded cell reference link to entity def",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-017",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | ![submit&#95;feedback](https://example.invalid/i.png) |",
+      "finding": "PR3 closing check 1 T17 discarded cell image alt name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-018",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | `p\\|q` caf&#xe9; |",
+      "finding": "PR3 closing check 1 T18 discarded cell code span w/ escaped pipe then entity"
+    },
+    {
+      "id": "R3-C-019",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | <https://example.invalid/caf&#xe9;> |",
+      "finding": "PR3 closing check 1 T19 discarded cell autolink entity"
+    },
+    {
+      "id": "R3-C-020",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "-\t| a |\n\t| --- |\n\t| x | caf&#xe9; |",
+      "finding": "PR3 closing check 1 T20 tab-indented table in list"
+    },
+    {
+      "id": "R3-C-021",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "> - | a |\n>   | --- |\n>   | x | caf&#xe9; |",
+      "finding": "PR3 closing check 1 T21 discarded cell, row in nested quote+list"
+    },
+    {
+      "id": "R3-C-022",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a | b |\n| --- | --- |\n| x | y | z | submit&#95;feedback |",
+      "finding": "PR3 closing check 1 T22 header 2 cols, body 4 cols",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-023",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- [ ] [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 K01 unchecked task + def"
+    },
+    {
+      "id": "R3-C-024",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- [x] [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 K02 checked task + def"
+    },
+    {
+      "id": "R3-C-025",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "- [x] [submit&#95;feedback]: https://example.invalid/",
+      "finding": "PR3 closing check 1 K03 task + def name label",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-026",
+      "form": 16,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "* [X] t\n  [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 recorded passing control K04 task then def next line"
+    },
+    {
+      "id": "R3-C-027",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "1. [ ] [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 K05 ordered task + def"
+    },
+    {
+      "id": "R3-C-028",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- [ ]\t[r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 K06 task tab + def"
+    },
+    {
+      "id": "R3-C-029",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- [caf&#xe9;] t",
+      "finding": "PR3 closing check 1 K07 checkbox with entity char (not a task)"
+    },
+    {
+      "id": "R3-C-030",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- [ ] [r]: https://example.invalid/ \"caf&#xe9;\"",
+      "finding": "PR3 closing check 1 K08 empty task item + def title"
+    },
+    {
+      "id": "R3-C-031",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/caf&#xe9;\n===",
+      "finding": "PR3 closing check 1 S01 def then === underline"
+    },
+    {
+      "id": "R3-C-032",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/caf&#xe9;\n---",
+      "finding": "PR3 closing check 1 S02 def then --- underline"
+    },
+    {
+      "id": "R3-C-033",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/\n\"caf&#xe9;\"\n===",
+      "finding": "PR3 closing check 1 S03 def multi-line title then ==="
+    },
+    {
+      "id": "R3-C-034",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Heading\n=== caf&#xe9;",
+      "finding": "PR3 closing check 1 S04 underline with entity (not underline)"
+    },
+    {
+      "id": "R3-C-035",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[submit&#95;feedback]: https://example.invalid/\n===",
+      "finding": "PR3 closing check 1 S05 def name label then ===",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-036",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/caf&#xe9;\nHeading\n===",
+      "finding": "PR3 closing check 1 S06 def then heading text then ==="
+    },
+    {
+      "id": "R3-C-037",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&#95;feedback\nx\n```",
+      "finding": "PR3 closing check 1 F01 fence info tail entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-038",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "```json caf&#xe9;\nx\n```",
+      "finding": "PR3 closing check 1 F02 fence info tail entity e-acute"
+    },
+    {
+      "id": "R3-C-039",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "~~~ x submit&#95;feedback\nx\n~~~",
+      "finding": "PR3 closing check 1 F03 tilde fence info tail entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-040",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit_feedback\nx\n```",
+      "finding": "PR3 closing check 1 F04 fence info tail plain name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-041",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```submit&#95;feedback\nx\n```",
+      "finding": "PR3 closing check 1 F05 fence info first word entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-042",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&lowbar;feedback\nx\n```",
+      "finding": "PR3 closing check 1 F06 fence info tail named-entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-043",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit\\_feedback\nx\n```",
+      "finding": "PR3 closing check 1 F07 fence info tail backslash-escape name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-044",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "- ```json submit&#95;feedback\n  x\n  ```",
+      "finding": "PR3 closing check 1 F08 fence in list, info tail entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-045",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json &#115;&#117;&#98;&#109;&#105;&#116;&#95;&#102;&#101;&#101;&#100;&#98;&#97;&#99;&#107;\nx\n```",
+      "finding": "PR3 closing check 1 F09 fence info tail all-decimal name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-046",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "```json &#x202E;x\nx\n```",
+      "finding": "PR3 closing check 1 F10 fence info tail RLO"
+    },
+    {
+      "id": "R3-C-047",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&#95;feedback\nx",
+      "finding": "PR3 closing check 1 F11 unclosed fence info tail entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-048",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "<https://example.invalid/caf&#xe9;>",
+      "finding": "PR3 closing check 1 L01 angle autolink e-acute"
+    },
+    {
+      "id": "R3-C-049",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "<https://example.invalid/submit&#95;feedback>",
+      "finding": "PR3 closing check 1 L02 angle autolink name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-050",
+      "form": 16,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "https://example.invalid/x&#xe9;",
+      "finding": "PR3 closing check 1 recorded passing control L03 bare URL trailing entity e-acute"
+    },
+    {
+      "id": "R3-C-051-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "See https://example.invalid/submit&#95;feedback/x now.",
+      "finding": "PR3 closing check 1 control L04 bare URL mid-path entity name (cmark literal)"
+    },
+    {
+      "id": "R3-C-051-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "See https://example.invalid/submit&#95;feedback/x now.",
+      "finding": "PR3 closing check 1 control L04 bare URL mid-path entity name (cmark literal)"
+    },
+    {
+      "id": "R3-C-052",
+      "form": 16,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "www.example.invalid/x&#xe9;",
+      "finding": "PR3 closing check 1 recorded passing control L05 www trailing entity"
+    },
+    {
+      "id": "R3-C-053",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "<caf&#xe9;@example.invalid>",
+      "finding": "PR3 closing check 1 L06 angle email entity (not autolink)"
+    },
+    {
+      "id": "R3-C-054",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "<mailto:submit&#95;feedback@example.invalid>",
+      "finding": "PR3 closing check 1 L07 mailto autolink name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-055",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "<https://example.invalid/&#x202E;x>",
+      "finding": "PR3 closing check 1 L08 angle autolink RLO"
+    },
+    {
+      "id": "R3-C-056-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "See https://example.invalid/caf&#xe9;s/x now.",
+      "finding": "PR3 closing check 1 control L09 bare URL mid-path entity e-acute (cmark literal)"
+    },
+    {
+      "id": "R3-C-056-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "See https://example.invalid/caf&#xe9;s/x now.",
+      "finding": "PR3 closing check 1 control L09 bare URL mid-path entity e-acute (cmark literal)"
+    },
+    {
+      "id": "R3-C-057",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: <> \"caf&#xe9;\"",
+      "finding": "PR3 closing check 1 W01 def empty dest, title e-acute"
+    },
+    {
+      "id": "R3-C-058",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[caf&#xe9;]: <>",
+      "finding": "PR3 closing check 1 W02 def empty dest, label e-acute"
+    },
+    {
+      "id": "R3-C-059",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[](https://example.invalid/caf&#xe9;)",
+      "finding": "PR3 closing check 1 W03 empty link text dest e-acute"
+    },
+    {
+      "id": "R3-C-060",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "![](https://example.invalid/submit&#95;feedback)",
+      "finding": "PR3 closing check 1 W04 empty alt image dest name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-061",
+      "form": 16,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[ ]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 recorded passing control W05 whitespace label (not a def)"
+    },
+    {
+      "id": "R3-C-062",
+      "form": 16,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[\n]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 recorded passing control W06 newline-only label (not a def)"
+    },
+    {
+      "id": "R3-C-063",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[x]( \"caf&#xe9;\")",
+      "finding": "PR3 closing check 1 W07 empty dest link with title"
+    },
+    {
+      "id": "R3-C-064",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]:\n<>\n\"caf&#xe9;\"",
+      "finding": "PR3 closing check 1 W08 multi-line def empty dest title"
+    },
+    {
+      "id": "R3-C-065",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[^]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 W09 footnote-form empty label ^"
+    },
+    {
+      "id": "R3-C-066",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[&#32;]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 W10 entity-space label"
+    },
+    {
+      "id": "R3-C-067",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[\\]]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 W11 escaped-bracket label"
+    },
+    {
+      "id": "R3-C-068",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[r]: <> \"submit&#95;feedback\"",
+      "finding": "PR3 closing check 1 W12 empty dest def, name title",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-069",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "![](https://example.invalid/i.png \"submit&#95;feedback\")",
+      "finding": "PR3 closing check 1 W13 empty image alt+title name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-070",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[a]: https://example.invalid/x\n[b]: https://example.invalid/caf&#xe9;\n[c]: https://example.invalid/y",
+      "finding": "PR3 closing check 1 D01 three defs, middle e-acute"
+    },
+    {
+      "id": "R3-C-071",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[a]: https://example.invalid/x\n   [b]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 D02 indented second def"
+    },
+    {
+      "id": "R3-C-072",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "> - > [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 D03 nested quote-list-quote def"
+    },
+    {
+      "id": "R3-C-073",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- a\n\n  [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 D04 list continuation def"
+    },
+    {
+      "id": "R3-C-074",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "   [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 D05 3-space indented def"
+    },
+    {
+      "id": "R3-C-075",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "> [r]: https://example.invalid/\n\"caf&#xe9;\"",
+      "finding": "PR3 closing check 1 D06 lazy-continuation title"
+    },
+    {
+      "id": "R3-C-076",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/ \"caf\n&#xe9;\"",
+      "finding": "PR3 closing check 1 D07 title spanning lines"
+    },
+    {
+      "id": "R3-C-077",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/caf&#xe9;\n| a |\n| --- |",
+      "finding": "PR3 closing check 1 D08 def then table header/delimiter"
+    },
+    {
+      "id": "R3-C-078",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/caf&#xe9;\n```\nx\n```",
+      "finding": "PR3 closing check 1 D09 def interrupted by fence"
+    },
+    {
+      "id": "R3-C-079",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/caf&#xe9;\n# h",
+      "finding": "PR3 closing check 1 D10 def then ATX heading"
+    },
+    {
+      "id": "R3-C-080",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaf&#xe9;]: https://example.invalid/",
+      "finding": "PR3 closing check 1 D11 def label 990 chars + entity"
+    },
+    {
+      "id": "R3-C-081",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaf&#xe9;]: https://example.invalid/",
+      "finding": "PR3 closing check 1 D12 def label over 999 (text)"
+    },
+    {
+      "id": "R3-C-082",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/\n[r]: https://example.invalid/submit&#95;feedback",
+      "finding": "PR3 closing check 1 D13 shadowed def name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-083",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[submit*&#95;*feedback]: https://example.invalid/",
+      "finding": "PR3 closing check 1 D14 label markup+entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-084",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: <https://example.invalid/caf&#xe9;>",
+      "finding": "PR3 closing check 1 D15 angle dest with entity"
+    },
+    {
+      "id": "R3-C-085",
+      "form": 16,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Para\n[r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 recorded passing control D16 def after paragraph (text)"
+    },
+    {
+      "id": "R3-C-086",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- [^n]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 D17 def in footnote-form inside list"
+    },
+    {
+      "id": "R3-C-087",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/ '&#x202E;x'",
+      "finding": "PR3 closing check 1 D18 def title single-quoted RLO"
+    },
+    {
+      "id": "R3-C-088",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/ (Facts &#x34F;)",
+      "finding": "PR3 closing check 1 D19 def title parens U+034F"
+    },
+    {
+      "id": "R3-C-089",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/revoke&lowbar;grant",
+      "finding": "PR3 closing check 1 D20 def dest named entity, write-skill SK7 name",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R3-C-090",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[submit&lowbar;feedback]: https://example.invalid/",
+      "finding": "PR3 closing check 1 D21 def label named entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C-091",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "> x\n>\n> [r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 D22 def in blockquote after blank quote line"
+    },
+    {
+      "id": "R3-C-092",
+      "form": 16,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n[r]: https://example.invalid/caf&#xe9;",
+      "finding": "PR3 closing check 1 recorded passing control D23 def immediately after table (becomes row)"
+    },
+    {
+      "id": "R3-C-093",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: https://example.invalid/caf&#xe9;\n***",
+      "finding": "PR3 closing check 1 D24 def then thematic break ***"
+    },
+    {
+      "id": "R3-C-094",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- [r]: https://example.invalid/\n\"caf&#xe9;\"",
+      "finding": "PR3 closing check 1 D25 def in list then lazy title"
+    },
+    {
+      "id": "R3-C-095",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[x][caf&#xe9;]\n\n[caf&#xe9;]: https://example.invalid/",
+      "finding": "PR3 closing check 1 G01 full reference label e-acute + def"
+    },
+    {
+      "id": "R3-C-096",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[x][caf&#xe9;]",
+      "finding": "PR3 closing check 1 G02 full reference label (no def)"
+    },
+    {
+      "id": "R3-C-097",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "# h caf&#xe9; #",
+      "finding": "PR3 closing check 1 G03 ATX closing seq"
+    },
+    {
+      "id": "R3-C-098",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "a\\\ncaf&#xe9;",
+      "finding": "PR3 closing check 1 G04 hard break backslash before entity"
+    },
+    {
+      "id": "R3-C-099-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Spend &region=us&currency=usd &copy 2026",
+      "finding": "PR3 closing check 1 control G05 controls: &region= &currency= &copy 2026"
+    },
+    {
+      "id": "R3-C-099-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "Spend &region=us&currency=usd &copy 2026",
+      "finding": "PR3 closing check 1 control G05 controls: &region= &currency= &copy 2026"
+    },
+    {
+      "id": "R3-C2-001",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "* [X] t\n  [r]: /caf&#xe9;",
+      "finding": "PR3 closing check 1 K04b task then def next line (non-URL)"
+    },
+    {
+      "id": "R3-C2-002",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[ ]: /caf&#xe9;",
+      "finding": "PR3 closing check 1 W05b whitespace label, non-URL dest"
+    },
+    {
+      "id": "R3-C2-003",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[\n]: /caf&#xe9;",
+      "finding": "PR3 closing check 1 W06b newline-only label, non-URL dest"
+    },
+    {
+      "id": "R3-C2-004",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Para\n[r]: /caf&#xe9;",
+      "finding": "PR3 closing check 1 D16b def after paragraph, non-URL"
+    },
+    {
+      "id": "R3-C2-005",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n[r]: /caf&#xe9;",
+      "finding": "PR3 closing check 1 D23b def after table, non-URL"
+    },
+    {
+      "id": "R3-C2-006",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit*&#95;*feedback\nx\n```",
+      "finding": "PR3 closing check 1 F12 fence info tail markup+entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C2-007",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```text revoke&#95;grant\nx\n```",
+      "finding": "PR3 closing check 1 F13 fence info tail SK7 name revoke_grant",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R3-C2-008",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&#x5f;feedback\nx\n```",
+      "finding": "PR3 closing check 1 F14 fence info tail hex name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C2-009",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json launch&period;plans&period;execute\nx\n```",
+      "finding": "PR3 closing check 1 F15 fence info tail, launch.plans.execute via &period;",
+      "names": [
+        "launch.plans.execute"
+      ]
+    },
+    {
+      "id": "R3-C2-010",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json&#32;submit&#95;feedback\nx\n```",
+      "finding": "PR3 closing check 1 F16 fence info tail joined to first word by entity space",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-C2-011-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "```submit&amp;#95;feedback\nx\n```",
+      "finding": "PR3 closing check 1 control F17 fence info first word double-encoded (literal)"
+    },
+    {
+      "id": "R3-C2-011-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "```submit&amp;#95;feedback\nx\n```",
+      "finding": "PR3 closing check 1 control F17 fence info first word double-encoded (literal)"
+    },
+    {
+      "id": "R3-MB-01",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&#95;feedback\nx\n```",
+      "finding": "PR3 SK9-M-B F01 fence info tail entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-02",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "~~~ x submit&#95;feedback\nx\n~~~",
+      "finding": "PR3 SK9-M-B F03 tilde fence info tail entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-03",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&lowbar;feedback\nx\n```",
+      "finding": "PR3 SK9-M-B F06 fence info tail named-entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-04",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit\\_feedback\nx\n```",
+      "finding": "PR3 SK9-M-B F07 fence info tail backslash-escape name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-05",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "- ```json submit&#95;feedback\n  x\n  ```",
+      "finding": "PR3 SK9-M-B F08 fence in list, info tail entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-06",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json &#115;&#117;&#98;&#109;&#105;&#116;&#95;&#102;&#101;&#101;&#100;&#98;&#97;&#99;&#107;\nx\n```",
+      "finding": "PR3 SK9-M-B F09 fence info tail all-decimal name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-07",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&#95;feedback\nx",
+      "finding": "PR3 SK9-M-B F11 unclosed fence info tail entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-08",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit*&#95;*feedback\nx\n```",
+      "finding": "PR3 SK9-M-B F12 fence info tail markup+entity name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-09",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```text revoke&#95;grant\nx\n```",
+      "finding": "PR3 SK9-M-B F13 fence info tail SK7 name revoke_grant",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R3-MB-10",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&#x5f;feedback\nx\n```",
+      "finding": "PR3 SK9-M-B F14 fence info tail hex name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-11",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json launch&period;plans&period;execute\nx\n```",
+      "finding": "PR3 SK9-M-B F15 fence info tail, launch.plans.execute via &period;",
+      "names": [
+        "launch.plans.execute"
+      ]
+    },
+    {
+      "id": "R3-MB-12",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json&#32;submit&#95;feedback\nx\n```",
+      "finding": "PR3 SK9-M-B F16 fence info tail joined to first word by entity space",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-13",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "Facts submit&#95;feedback.",
+      "finding": "PR3 SK9-M-B AST text",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-14",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "`submit\\u005ffeedback`",
+      "finding": "PR3 SK9-M-B AST code span",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-15",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```\nsubmit\\u005ffeedback\n```",
+      "finding": "PR3 SK9-M-B AST code block",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-16",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "Facts <i>submit&#95;feedback</i>.",
+      "finding": "PR3 SK9-M-B AST HTML inline",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-17",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "<div>submit&#95;feedback</div>",
+      "finding": "PR3 SK9-M-B AST HTML block",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-18",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "[x](https://example.invalid/submit&#95;feedback)",
+      "finding": "PR3 SK9-M-B AST link URL",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-19",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "[x](https://example.invalid/ \"submit&#95;feedback\")",
+      "finding": "PR3 SK9-M-B AST link title",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-20",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "![x](https://example.invalid/submit&#95;feedback.png)",
+      "finding": "PR3 SK9-M-B AST image URL",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-21",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "![x](https://example.invalid/x.png \"submit&#95;feedback\")",
+      "finding": "PR3 SK9-M-B AST image title",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-22",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "<div>caf&eacute;</div>",
+      "finding": "PR3 SK9-M-B reader view 1 text ASCII"
+    },
+    {
+      "id": "R3-MB-23",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "<i>\\u00<span hidden>x</span>e9</i>",
+      "finding": "PR3 SK9-M-B reader view 2 normalization ASCII"
+    },
+    {
+      "id": "R3-MB-24",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "<span data-value=\"caf&eacute;\">Facts</span>",
+      "finding": "PR3 SK9-M-B reader attribute ASCII"
+    },
+    {
+      "id": "R3-MB-25",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \\u00e9.",
+      "finding": "PR3 SK9-M-B raw normalization JSON"
+    },
+    {
+      "id": "R3-MB-26",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \\u00<b></b>e9.",
+      "finding": "PR3 SK9-M-B tag removal normalization ASCII"
+    },
+    {
+      "id": "R3-MB-27",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \\u20<b></b>2e.",
+      "finding": "PR3 SK9-M-B format-removal intermediate ASCII"
+    },
+    {
+      "id": "R3-MB-28",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "---\ndescription: \"caf\\b\"\n---\nFacts.",
+      "finding": "PR3 SK9-M-B JSON frontmatter scalar ASCII"
+    },
+    {
+      "id": "R3-MB-29",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "---\nmetadata: {\"caf\\b\": \"ASCII\"}\n---\nFacts.",
+      "finding": "PR3 SK9-M-B JSON frontmatter key ASCII"
+    },
+    {
+      "id": "R3-MB-30",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "revo`padding`ke_grant.",
+      "finding": "PR3 SK9-M-B prose projection name",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R3-MB-31",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "[x](https://example.invalid/submit\\u005ffeedback)",
+      "finding": "PR3 SK9-M-B reference path normalization name",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "R3-MB-32",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \\u00*e9*.",
+      "finding": "PR3 SK9-M-B rendered serialization normalization ASCII"
+    },
+    {
+      "id": "R3-MB-33",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "<span style=\"x:\\u00/**/e9\">Facts</span>",
+      "finding": "PR3 SK9-M-B visibility style normalization ASCII"
+    },
+    {
+      "id": "R3-MB-34",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "<span style=\"x:revo/**/ke_grant\">Facts</span>",
+      "finding": "PR3 SK9-M-B visibility style normalization name",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "R3-MB-35",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts caf&#233; submit&#95;feedback.",
+      "finding": "PR3 SK9-M-B source-line diagnostic reparse"
+    },
+    {
+      "id": "C-DEF-01-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[x][r]\n\n[r]: https://example.invalid/ \"ASCII title\""
+    },
+    {
+      "id": "C-DEF-01-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "[x][r]\n\n[r]: https://example.invalid/ \"ASCII title\""
+    },
+    {
+      "id": "C-DEF-02-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[r]: https://example.invalid/ \"ASCII title\""
+    },
+    {
+      "id": "C-DEF-02-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "[r]: https://example.invalid/ \"ASCII title\""
+    },
+    {
+      "id": "C-DEF-03-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[r]: https://example.invalid/&amp;#x34F; \"&amp;region\""
+    },
+    {
+      "id": "C-DEF-03-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "[r]: https://example.invalid/&amp;#x34F; \"&amp;region\""
+    },
+    {
+      "id": "C-DEF-04-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[r]: https://example.invalid/?a=1&region=eu \"&currency=USD &copy 2026\""
+    },
+    {
+      "id": "C-DEF-04-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "[r]: https://example.invalid/?a=1&region=eu \"&currency=USD &copy 2026\""
+    },
+    {
+      "id": "C-DEF-05-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "`[r]: https://example.invalid/&eacute;`"
+    },
+    {
+      "id": "C-DEF-05-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "`[r]: https://example.invalid/&eacute;`"
+    },
+    {
+      "id": "C-DEF-06-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "`prefix\n[r]: https://example.invalid/&eacute;\nsuffix`"
+    },
+    {
+      "id": "C-DEF-06-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "`prefix\n[r]: https://example.invalid/&eacute;\nsuffix`"
+    },
+    {
+      "id": "C-DEF-07-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "```\n[r]: https://example.invalid/&eacute;\n```"
+    },
+    {
+      "id": "C-DEF-07-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "```\n[r]: https://example.invalid/&eacute;\n```"
+    },
+    {
+      "id": "C-DEF-08-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "---\n\n    [r]: https://example.invalid/&eacute;"
+    },
+    {
+      "id": "C-DEF-08-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "---\n\n    [r]: https://example.invalid/&eacute;"
+    },
+    {
+      "id": "C-DEF-09-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "> ```\n> [r]: https://example.invalid/&eacute;\n> ```"
+    },
+    {
+      "id": "C-DEF-09-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "> ```\n> [r]: https://example.invalid/&eacute;\n> ```"
+    },
+    {
+      "id": "C-DEF-10-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[r&amp;#x34F;]: https://example.invalid/"
+    },
+    {
+      "id": "C-DEF-10-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "[r&amp;#x34F;]: https://example.invalid/"
+    },
+    {
+      "id": "C-DEF-11-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | ASCII |"
+    },
+    {
+      "id": "C-DEF-11-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | ASCII |"
+    },
+    {
+      "id": "C-DEF-12-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | `&eacute;` |"
+    },
+    {
+      "id": "C-DEF-12-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | `&eacute;` |"
+    },
+    {
+      "id": "C-DEF-13-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | &amp;#x34F; &region= &currency= &copy 2026 |"
+    },
+    {
+      "id": "C-DEF-13-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | &amp;#x34F; &region= &currency= &copy 2026 |"
+    },
+    {
+      "id": "C-DEF-14-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | `a\\|&eacute;` |"
+    },
+    {
+      "id": "C-DEF-14-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | `a\\|&eacute;` |"
+    },
+    {
+      "id": "C-DEF-15-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "- [ ] [r]: https://example.invalid/ \"ASCII\""
+    },
+    {
+      "id": "C-DEF-15-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "- [ ] [r]: https://example.invalid/ \"ASCII\""
+    },
+    {
+      "id": "C-DEF-16-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[x][r]\n\n- [X] [r]: https://example.invalid/ \"ASCII\""
+    },
+    {
+      "id": "C-DEF-16-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "[x][r]\n\n- [X] [r]: https://example.invalid/ \"ASCII\""
+    },
+    {
+      "id": "C-DEF-17-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | `submit&#95;feedback` |"
+    },
+    {
+      "id": "C-DEF-17-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| safe | `submit&#95;feedback` |"
+    },
+    {
+      "id": "C-DEF-18-a",
+      "form": 17,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| `a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|` | `submit&#95;feedback` |"
+    },
+    {
+      "id": "C-DEF-18-n",
+      "form": 17,
+      "check": "name",
+      "expected": "pass",
+      "text": "| a |\n| --- |\n| `a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|` | `submit&#95;feedback` |"
+    },
+    {
+      "id": "C-FLIP-01",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts &amp;#x34F;",
+      "finding": "PR3 SK9-M literal-ASCII flip entity-nested"
+    },
+    {
+      "id": "C-FLIP-02",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts \\u0026#x34F;",
+      "finding": "PR3 SK9-M literal-ASCII flip escape-to-entity"
+    },
+    {
+      "id": "C-FLIP-03",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts\n&amp;#xFE0F;",
+      "finding": "PR3 SK9-M literal-ASCII flip diag-nested-FE0F"
+    },
+    {
+      "id": "C-M-region-plain",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts &region=eu"
+    },
+    {
+      "id": "C-M-region-code",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "`&region=eu`"
+    },
+    {
+      "id": "C-M-region-link",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[x](https://example.invalid/?a=1&region=eu)"
+    },
+    {
+      "id": "C-M-currency-plain",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts &currency=USD"
+    },
+    {
+      "id": "C-M-currency-code",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "`&currency=USD`"
+    },
+    {
+      "id": "C-M-currency-link",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[x](https://example.invalid/?a=1&currency=USD)"
+    },
+    {
+      "id": "C-M-copy-plain",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts &copy 2026"
+    },
+    {
+      "id": "C-M-copy-code",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "`&copy 2026`"
+    },
+    {
+      "id": "C-M-copy-link",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[x](<https://example.invalid/?a=1&copy 2026>)"
+    },
+    {
+      "id": "C-M-amp-plain",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts &amp;region"
+    },
+    {
+      "id": "C-M-amp-code",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "`&amp;region`"
+    },
+    {
+      "id": "C-M-amp-link",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "[x](https://example.invalid/?a=1&amp;region)"
+    },
+    {
+      "id": "REG-quoted-tag",
+      "form": 13,
+      "check": "name",
+      "expected": "reject",
+      "text": "`revo<span title=\"a>b\">ke_grant`",
+      "finding": "PR2 SK9-H quote-aware tag grammar",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "REG-stray-lt",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Report when spend < budget. revo<b></b>ke_grant",
+      "finding": "PR2 SK9-H stray less-than before valid tag",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "REG-reader-context",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Use `<span title=\"` then call revo<b title=\">\">ke_grant.",
+      "finding": "PR2 SK9-I context-confused tag removal",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "REG-head",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "<head>\n\nUse `<span title=\"` then call revo<b title=\">\">ke_grant.",
+      "finding": "PR2 SK9-J head must not hide reader text",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "REG-view-two",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "revo<span hidden>x</span>ke_grant",
+      "finding": "PR2 SK9-J-A second reader view",
+      "names": [
+        "revoke_grant"
+      ]
+    },
+    {
+      "id": "REG-raw-utf8",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts",
+      "finding": "PR2 SK9-L invalid UTF-8",
+      "bytes_hex": "46616374730aff"
+    },
+    {
+      "id": "REG-raw-control",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts\b",
+      "finding": "PR2 SK9-L raw controls"
+    },
+    {
+      "id": "REG-unicode-intermediate",
+      "form": 15,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts \\u200b",
+      "finding": "PR3 SK9-M-B normalization must retain forbidden intermediate"
+    },
+    {
+      "id": "REG-semicolon",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts &copy 2026",
+      "finding": "PR3 SK9-M legacy named reference without semicolon"
+    },
+    {
+      "id": "REG-once",
+      "form": 15,
+      "check": "ascii",
+      "expected": "pass",
+      "text": "Facts &amp;#x34F;",
+      "finding": "PR3 SK9-M decode only once"
+    },
+    {
+      "id": "REG-definition-unused",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: /caf&eacute;",
+      "finding": "PR3 REVIEW-1 unrendered definition destination",
+      "line": 1
+    },
+    {
+      "id": "REG-definition-shadowed",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: /facts\n[r]: /caf&eacute;",
+      "finding": "PR3 REVIEW-1 shadowed definition",
+      "line": 2
+    },
+    {
+      "id": "REG-definition-label",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[caf&eacute;]: /facts",
+      "finding": "PR3 REVIEW-1 definition label",
+      "line": 1
+    },
+    {
+      "id": "REG-definition-title",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: /facts \"caf&eacute;\"",
+      "finding": "PR3 REVIEW-1 definition title",
+      "line": 1
+    },
+    {
+      "id": "REG-definition-container",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "> - [r]: /caf&eacute;",
+      "finding": "PR3 REVIEW-1 nested container definition",
+      "line": 1
+    },
+    {
+      "id": "REG-definition-footnote",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[^n]: caf&eacute;",
+      "finding": "PR3 REVIEW-1 footnote-form definition",
+      "line": 1
+    },
+    {
+      "id": "REG-definition-name",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "[r]: /submit&#95;feedback",
+      "finding": "PR3 REVIEW-1 encoded forbidden name in definition",
+      "names": [
+        "submit_feedback"
+      ],
+      "name_line": 1
+    },
+    {
+      "id": "REG-task-definition",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "- [x] [r]: /caf&eacute;",
+      "finding": "PR3 consumed task-checkbox definition",
+      "line": 1
+    },
+    {
+      "id": "REG-discarded-cell",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | caf&eacute; |",
+      "finding": "PR3 discarded GFM excess cell"
+    },
+    {
+      "id": "REG-discarded-reader",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | sub[mit](https://example.invalid/)&#95;feedback |",
+      "finding": "PR3 discarded cell joined reader text",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "REG-discarded-reference",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | sub[mit][r]&#95;feedback |\n\n[r]: /facts",
+      "finding": "PR3 discarded cell reference resolution",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "REG-discarded-pipes",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| x | \\| caf&eacute; |",
+      "finding": "PR3 native escaped-pipe cell width"
+    },
+    {
+      "id": "REG-fence-tail",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "```json submit&#95;feedback\nx\n```",
+      "finding": "PR3 closing check 1 fence info-string tail",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "REG-shared-ascii",
+      "form": 18,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Collector source.\n",
+      "finding": "PR3 SK9-M-B future collector must feed ASCII scan",
+      "collector_value": "caf\u00e9 submit_feedback"
+    },
+    {
+      "id": "REG-shared-name",
+      "form": 18,
+      "check": "name",
+      "expected": "reject",
+      "text": "Collector source.\n",
+      "finding": "PR3 SK9-M-B future collector must feed name scan",
+      "names": [
+        "submit_feedback"
+      ],
+      "collector_value": "caf\u00e9 submit_feedback"
+    },
+    {
+      "id": "REG-overlap",
+      "form": 11,
+      "check": "name",
+      "expected": "reject",
+      "text": "propose-actions.tests.create",
+      "finding": "PR2 SK9-C partial overlaps",
+      "names": [
+        "actions.tests.create"
+      ]
+    },
+    {
+      "id": "REG-retired",
+      "form": 4,
+      "check": "name",
+      "expected": "reject",
+      "text": "generate_background",
+      "finding": "PR3 lock refresh retains removed-name rejections",
+      "names": [
+        "generate_background"
+      ]
+    },
+    {
+      "id": "REG-unknown",
+      "form": 4,
+      "check": "name",
+      "expected": "reject",
+      "text": "{\"method\":\"tools/call\",\"params\":{\"name\":\"made-up-tool\"}}",
+      "finding": "PR2 SK9-F unknown wire name",
+      "names": [
+        "made-up-tool"
+      ]
+    },
+    {
+      "id": "C-NAME-letter-edge",
+      "form": 11,
+      "check": "name",
+      "expected": "pass",
+      "text": "presubmit_feedbackpost"
+    },
+    {
+      "id": "C-NAME-underscore-edge",
+      "form": 11,
+      "check": "name",
+      "expected": "pass",
+      "text": "submitfeedback"
+    },
+    {
+      "id": "C-NAME-bare-newline",
+      "form": 11,
+      "check": "name",
+      "expected": "pass",
+      "text": "submit\n_feedback"
+    },
+    {
+      "id": "REG-frontmatter-scalar",
+      "form": 4,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "---\ndescription: \"caf\\b\"\n---\nFacts.",
+      "finding": "PR3 SK9-M-B parsed JSON scalar"
+    },
+    {
+      "id": "REG-frontmatter-key",
+      "form": 4,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "---\nmetadata: {\"caf\\b\": \"ASCII\"}\n---\nFacts.",
+      "finding": "PR3 SK9-M-B parsed JSON object key"
+    },
+    {
+      "id": "F08-N-unclosed",
+      "form": 8,
+      "check": "name",
+      "expected": "reject",
+      "text": "Then sub*mit_feedback.",
+      "names": [
+        "submit_feedback"
+      ]
+    },
+    {
+      "id": "REG-format-name",
+      "form": 9,
+      "check": "name",
+      "expected": "reject",
+      "text": "```text\nsubmit\\u200b_feedback\n```",
+      "names": [
+        "submit_feedback"
+      ],
+      "finding": "PR2 zero-width format-character name split"
+    },
+    {
+      "id": "REG-raw-BOM",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "\ufeffFacts",
+      "finding": "PR2 SK9-L BOM"
+    },
+    {
+      "id": "REG-raw-UTF16",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts",
+      "bytes_hex": "fffe46006100630074007300",
+      "finding": "PR2 SK9-L UTF-16 with BOM"
+    },
+    {
+      "id": "REG-raw-UTF16-no-BOM",
+      "form": 14,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "Facts",
+      "bytes_hex": "46006100630074007300",
+      "finding": "PR2 SK9-L UTF-16 without BOM"
+    },
+    {
+      "id": "REG-discarded-many-pipes",
+      "form": 16,
+      "check": "name",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| `a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|a\\|` | *submit*&#95;feedback |",
+      "names": [
+        "submit_feedback"
+      ],
+      "finding": "PR3 discarded cell escaped-pipe width limit"
+    },
+    {
+      "id": "REG-overlap-longer-first",
+      "form": 11,
+      "check": "name",
+      "expected": "reject",
+      "text": "resume_render_ad",
+      "names": [
+        "resume_render",
+        "render_ad"
+      ],
+      "finding": "PR2 SK9-C longer-first partial overlap"
+    },
+    {
+      "id": "REG-escaped-pipe-width",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "| a |\n| --- |\n| \\| | caf&eacute; |",
+      "table_width": 2,
+      "row_line": 3,
+      "finding": "PR3 native escaped-pipe lexer must not inflate the recovery header"
+    },
+    {
+      "id": "REG-definition-title-multiline",
+      "form": 16,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "[r]: /facts\n \"caf&eacute;\"",
+      "line": 1,
+      "finding": "PR3 REVIEW-1 diagnostic points to definition start, including multiline title"
+    },
+    {
+      "id": "REG-read-effect",
+      "form": 4,
+      "check": "name",
+      "expected": "reject",
+      "text": "submit_feedback",
+      "names": [
+        "submit_feedback"
+      ],
+      "finding": "PR2 SK9-F Read rejects a Read-tier write-effect tool"
+    },
+    {
+      "id": "REG-read-tier",
+      "form": 4,
+      "check": "name",
+      "expected": "reject",
+      "text": "dry_run_actions",
+      "names": [
+        "dry_run_actions"
+      ],
+      "finding": "PR2 SK9-B Read rejects a Write-tier read-effect tool"
+    },
+    {
+      "id": "REG-write-effect",
+      "form": 4,
+      "check": "name",
+      "expected": "reject",
+      "text": "verify_signal_ingestion",
+      "tier": "write",
+      "names": [
+        "verify_signal_ingestion"
+      ],
+      "finding": "PR2 SK9-F Write rejects other write-effect tools"
+    },
+    {
+      "id": "C-write-proposal",
+      "form": 4,
+      "check": "name",
+      "expected": "pass",
+      "text": "propose-actions",
+      "tier": "write"
+    },
+    {
+      "id": "C-write-preview",
+      "form": 4,
+      "check": "name",
+      "expected": "pass",
+      "text": "dry_run_actions",
+      "tier": "write"
+    },
+    {
+      "id": "REG-retired-generation",
+      "form": 4,
+      "check": "name",
+      "expected": "reject",
+      "text": "get_generation",
+      "names": [
+        "get_generation"
+      ],
+      "finding": "PR3 removed generation registration remains forbidden"
+    },
+    {
+      "id": "REG-retired-resume",
+      "form": 4,
+      "check": "name",
+      "expected": "reject",
+      "text": "resume_generation",
+      "names": [
+        "resume_generation"
+      ],
+      "finding": "PR3 removed generation registration remains forbidden"
+    },
+    {
+      "id": "REG-retired-launcher",
+      "form": 4,
+      "check": "name",
+      "expected": "reject",
+      "text": "launcher.execute_batch",
+      "names": [
+        "launcher.execute_batch"
+      ],
+      "finding": "PR3 removed launcher registration remains forbidden"
+    },
+    {
+      "id": "REG-CC2-M01-image-url-ascii",
+      "form": 3,
+      "check": "ascii",
+      "expected": "reject",
+      "text": "![cc2image](https://example.invalid/&#937;/safe)",
+      "finding": "PR3 closing check 2 CC2-M01: missing ASCII image URL decoder witness"
+    }
+  ]
+}
