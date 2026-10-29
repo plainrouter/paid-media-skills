@@ -6,6 +6,14 @@ The lock records production registrations at the fetched main revision. An absen
 
 `creative-grant` means a required creative scope declared by the tool. Conditional creative checks for creative variants of general proposals do not exclude the governed pause/resume or budget proposal tools.
 
+## External third-party tools
+
+`metadata.tools` remains exclusively the exact Plainrouter names in `tools.lock.json`. Optional `metadata.external-tools` is a space-separated string inventory checked against the reviewed `EXTERNAL_TOOLS` allowlist in `scripts/validate.py`; additions require a contract/code review, not a lock refresh. Its only entry is `ads_library_search`, provider Meta Ads MCP, effect **read**. This is not a Plainrouter tool, tier or grant. Connect Meta's own Ads MCP separately, discover the full name ending in `ads_library_search` (client prefixes vary), and use its current discovered input schema only.
+
+External references are scanned through the same raw, decoded, rendered, ASCII and resource guards as Plainrouter names. References must match the union of the two distinct inventories; unknown or duplicate external declarations fail, every external effect must be read, and placing a locked tool in the external inventory cannot bypass its existing tier/effect/exclusion checks. No third-party name is added to the lock or its core SHA. The Plainrouter registrations below are unchanged.
+
+## Plainrouter tools
+
 | Tool | Minimum tier | Effect | SK7 | Rule |
 | --- | --- | --- | --- | --- |
 | `actions.rules.create` | write | write | yes | explicit-exclusion |

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "core_sha": "340c391cafd7176462ab5adb22b0becee12af5f2",
   "installation_docs_checked": "2026-10-11",
@@ -46,6 +46,13 @@
       "minimum_tier": "write",
       "zip_bytes": 10530,
       "zip_sha256": "2b081a0253c64023d5f53cc783d33929261245275a063a18d0e5fa0c7e2754ff"
+    },
+    {
+      "name": "plainrouter-ad-research",
+      "version": "0.1.0",
+      "minimum_tier": "read",
+      "zip_bytes": 8151,
+      "zip_sha256": "8b80e23635d53c78d1a44b34050b4eb3b432a5758cbf7292f3588d4b24d79520"
     }
   ]
 }
