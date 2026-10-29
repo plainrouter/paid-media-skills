@@ -48,6 +48,13 @@ class GuardContractTest(unittest.TestCase):
 
     def test_unmodified_bundles_pass(self):
         self.assertEqual([], validate(self.root))
+        research = (self.root / 'skills/plainrouter-ad-research/SKILL.md').read_text()
+        for required in [
+            '### Competitor activity (published by Meta)',
+            '### Your results (counted by Plainrouter)',
+            "Ad Library figures are published by Meta. Plainrouter has not counted these figures. Plainrouter counts the customer's own arrivals and conversions separately; competitor results are unavailable.",
+        ]:
+            self.assertIn(required, research)
         # Literal comparisons remain prose in every original document.
         for path in (self.root / 'skills').rglob('*.md'):
             path.write_text(path.read_text() + '\nReport when spend < budget.\n')
@@ -71,11 +78,24 @@ class GuardContractTest(unittest.TestCase):
             ('locked write', declared.replace('ads_library_search', 'submit_feedback'), 'forbidden tool reference: submit_feedback'),
             ('wrong inventory', original.replace('"tools": "', '"tools": "ads_library_search ') + '\nUse `ads_library_search`.\n', 'tool absent from tools.lock.json: ads_library_search'),
             ('duplicate', declared.replace('ads_library_search', 'ads_library_search ads_library_search'), 'Invalid declared external tool inventory'),
+            ('Meta create', original + '\nads_create_campaign\n', 'forbidden tool reference: ads_create_campaign'),
+            ('Meta update', original + '\nads_update_ad\n', 'forbidden tool reference: ads_update_ad'),
+            ('Meta delete', original + '\nads_delete_ad\n', 'forbidden tool reference: ads_delete_ad'),
+            ('Meta activate', original + '\nads_activate_entity\n', 'forbidden tool reference: ads_activate_entity'),
+            ('Meta boost', original + '\nads_boost_ig_post\n', 'forbidden tool reference: ads_boost_ig_post'),
+            ('Meta markup', original + '\nads_cre**ate**_campaign\n', 'forbidden tool reference: ads_create_campaign'),
         ]
         for label, source, diagnostic in cases:
             with self.subTest(external=label):
                 path.write_text(source)
                 self.assertIn(diagnostic, '\n'.join(validate(self.root)))
+        path.write_text(original + '\nads_update_ad\n')
+        misclassified = dict(self.tools['get_account_state'], name='ads_update_ad', grant_operation='ads_update_ad')
+        (self.root / 'tools.lock.json').write_text(json.dumps(dict(self.lock, tools=self.lock['tools'] + [misclassified])))
+        self.assertIn('forbidden tool reference: ads_update_ad', '\n'.join(validate(self.root)))
+        collision = dict(self.tools['submit_feedback'], name='ads_library_search', grant_operation='ads_library_search')
+        (self.root / 'tools.lock.json').write_text(json.dumps(dict(self.lock, tools=self.lock['tools'] + [collision])))
+        self.assertIn('external tool collides with locked tool: ads_library_search', '\n'.join(validate(self.root)))
 
     def test_creative_store_inside_store_from_url_is_not_a_reference(self):
         result = referenced_tools('launch.creatives.store-from-url', set(self.tools))
