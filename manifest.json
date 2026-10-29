@@ -51,8 +51,8 @@
       "name": "plainrouter-ad-research",
       "version": "0.1.0",
       "minimum_tier": "read",
-      "zip_bytes": 8572,
-      "zip_sha256": "4153ac1c49dc36a3b4f981fae3763a4ef51c3256b79cbbd2eb3e4ab6333c4197"
+      "zip_bytes": 8580,
+      "zip_sha256": "b798066385e4c91658967f3ef2d2cd4e71f2a21f8b963a96856e91543cc636e4"
     }
   ]
 }

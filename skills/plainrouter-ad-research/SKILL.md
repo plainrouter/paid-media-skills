@@ -16,7 +16,7 @@ Put competitor activity published by Meta beside the customer's own counted arri
 
 Installing this skill connects neither server and authorizes neither account. Configure Meta's own Ads MCP separately and a Plainrouter connection with an active workspace/account Read grant. A customer's Plainrouter connection token cannot authorize competitor Ad Library searches. Do not collect credentials in chat.
 
-Warn up front: Meta's Ad Library documentation lists ordinary commercial ads only when they were delivered in the EU or UK, for about a year after their last delivery. Ads that reached no EU or UK location are listed only if they are about social issues, elections or politics, so a search limited to other countries returns those ads, commercial ads that also ran in the EU or UK, or nothing. If the discovered `ads_library_search` description states different coverage, report that instead. No matching ads does not establish that a competitor has no advertising activity.
+Warn up front: Meta's Ad Library API documentation lists ordinary commercial ads only when they were delivered in the EU or UK, for about a year after their last delivery. Ads that reached no EU or UK location are listed only if they are about social issues, elections or politics, so a search limited to other countries returns those ads, commercial ads that also ran in the EU or UK, or nothing. If the discovered `ads_library_search` description states different coverage, report that instead. No matching ads does not establish that a competitor has no advertising activity.
 
 ## Discovery and account selection
 
@@ -51,7 +51,7 @@ Include this basis note verbatim:
 
 Ad Library figures are published by Meta. Plainrouter has not counted these figures. Plainrouter counts the customer's own arrivals and conversions separately; competitor results are unavailable.
 
-State commercial EU/UK coverage for about a year after last delivery (or the discovered tool's differing coverage), political/issue coverage, partial collections, unmatched windows, stale reads and unavailable fields. Copy bodies, link titles, captions and descriptions are arrays of variants per unique ad card, not evidence of a winning combination. Delivery start/stop are the advertiser's scheduled dates; a blank stop means no end date was set. Run length and reach do not establish results or profitability. `publisher_platforms` is not placement detail. Commercial Ad Library data provides no spend, impressions, clicks, conversions, CPA or ROAS.
+State the Ad Library API's commercial EU/UK coverage for about a year after last delivery (or the discovered tool's differing coverage), political/issue coverage, partial collections, unmatched windows, stale reads and unavailable fields. Copy bodies, link titles, captions and descriptions are arrays of variants per unique ad card, not evidence of a winning combination. Delivery start/stop are the advertiser's scheduled dates; a blank stop means no end date was set. Run length and reach do not establish results or profitability. `publisher_platforms` is not placement detail. Commercial Ad Library data provides no spend, impressions, clicks, conversions, CPA or ROAS.
 
 ## Missing data
 

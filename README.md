@@ -134,7 +134,7 @@ Before **every** release, a maintainer:
    ```
 
 2. Reviews name, grant, tier, effect, input schema and proposal-state changes against core source. Updates `manifest.json`'s `core_sha`, repository/skill versions and installation-doc check date; updates skill metadata versions and instructions. Rechecks the official app, Code and API docs cited above.
-3. Refreshes manifest ZIP hashes, validates, runs guard/package tests, builds six ZIPs and reviews checksums and bundle contents. Gets CI green on the reviewed PR/commit.
+3. Refreshes manifest ZIP hashes, validates, runs guard/package tests, builds one ZIP per skill and reviews checksums and bundle contents. Gets CI green on the reviewed PR/commit.
 4. A maintainer merges, changes visibility when ready, and separately publishes the reviewed version with one ZIP per skill, the build manifest and checksums. This repository has no automated tagging or GitHub release workflow.
 
 Versioning policy: patch for compatible corrections, minor for additive capabilities, major for incompatible tool/install/output contracts. Publishing or downloading a bundle never installs it in an account, enables an MCP connection or authorizes writes.

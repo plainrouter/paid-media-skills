@@ -83,7 +83,7 @@ class GuardContractTest(unittest.TestCase):
             ('Meta delete', original + '\nads_delete_ad\n', 'forbidden tool reference: ads_delete_ad'),
             ('Meta activate', original + '\nads_activate_entity\n', 'forbidden tool reference: ads_activate_entity'),
             ('Meta boost', original + '\nads_boost_ig_post\n', 'forbidden tool reference: ads_boost_ig_post'),
-            ('Meta markup', original + '\nads_cre**ate**_campaign\n', 'forbidden tool reference: ads_create_campaign'),
+            ('Meta markup', original + '\n`ads_cre**ate**_campaign`\n', 'forbidden tool reference: ads_create_campaign'),
         ]
         for label, source, diagnostic in cases:
             with self.subTest(external=label):
