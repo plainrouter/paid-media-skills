@@ -1,6 +1,6 @@
 # Plainrouter paid-media skills for Claude
 
-Six original skills for Meta advertisers using the Plainrouter MCP server: four Read workflows and two governed Write proposal workflows. The repository is created private; repository maintainers control visibility and publication. Everything here is licensed under [Apache-2.0](LICENSE).
+Seven original skills for Meta advertisers using the Plainrouter MCP server: five Read workflows and two governed Write proposal workflows. The repository is created private; repository maintainers control visibility and publication. Everything here is licensed under [Apache-2.0](LICENSE).
 
 **Installing a skill does not connect or authorize Plainrouter. The MCP connection and its grant are set up separately.** Choose the intended workspace/account and grant tier in that separate setup. A skill cannot supply credentials, expand its grant or approve its own proposal.
 
@@ -9,6 +9,7 @@ Six original skills for Meta advertisers using the Plainrouter MCP server: four 
 | Skill | Purpose | Minimum tier | Business-state writes |
 | --- | --- | --- | --- |
 | [plainrouter-counted-brief](skills/plainrouter-counted-brief/SKILL.md) | Counted arrivals and purchases beside Meta-reported figures, by available scope/window | Read | None |
+| [plainrouter-ad-research](skills/plainrouter-ad-research/SKILL.md) | Meta Ad Library competitor activity beside your own counted results; requires Meta's own Ads MCP separately | Read | None |
 | [plainrouter-signal-check](skills/plainrouter-signal-check/SKILL.md) | Signal health, consent rates, existing cookie scan and install state | Read | None |
 | [plainrouter-action-review](skills/plainrouter-action-review/SKILL.md) | Pending/past proposals, frozen counted evidence and receipts | Read | None |
 | [plainrouter-test-readout](skills/plainrouter-test-readout/SKILL.md) | Existing judging Tests and their stored verdicts | Read | None |
@@ -90,6 +91,8 @@ scripts/guard_report.py
 
 Each bundle is self-contained. Only `name`, `description` (at most 200 characters), `license`, `compatibility` and `metadata` appear in frontmatter. Metadata maps strings to strings; its `tools` value is a space-separated exact-name inventory, not permission. `SKILL.md` stays under 500 lines and references are one level deep. This portable subset intentionally uses no client-specific frontmatter. [Agent Skills specification](https://agentskills.io/specification).
 
+`metadata.external-tools` optionally declares a separate space-separated inventory of reviewed third-party tools. The validator's short `EXTERNAL_TOOLS` allowlist permits only `ads_library_search` from Meta's own Ads MCP, with a read effect. It is not a Plainrouter tool, is not added to `tools.lock.json`, and conveys no Plainrouter authorization. Discover its full client-prefixed name ending in that suffix on the separately connected Meta server and use only its discovered input schema. Unknown, duplicate or misclassified `metadata.external-tools` entries and undeclared `ads_library_search` references fail validation. Meta write names starting `ads_create_`, `ads_update_` or `ads_delete_`, plus `ads_activate_entity` and `ads_boost_ig_post`, are always forbidden in bundles, even if locked. Other third-party tool names in prose are not recognized and need review. External/locked name collisions fail validation; Plainrouter names still belong only in `metadata.tools`, and every existing bundle guard remains active. See [TOOL-CONTRACT.md](TOOL-CONTRACT.md).
+
 `tools.lock.json` records each production tool's exact name, minimum tier, read/write effect and grant operation, plus the core commit SHA used for generation. It contains no repository identity, source location or source digest. The effect describes business-state mutation, not incidental request logging. Registration does not guarantee feature availability or executability. The current lock was generated from **`340c391cafd7176462ab5adb22b0becee12af5f2`**.
 
 The generator reads a pinned core git revision without booting the application or calling MCP. It records tools without read-only annotations as write effects and stops on unclassified permissions or changed special refusal semantics. Missing or ambiguous registered classes are reported with the registered tool identifier. The derived SK7 membership and its rules are recorded in the lock and TOOL-CONTRACT.md. Review core schema/behavior changes as well as lock changes; name/tier lint alone cannot establish runtime compatibility.
@@ -131,7 +134,7 @@ Before **every** release, a maintainer:
    ```
 
 2. Reviews name, grant, tier, effect, input schema and proposal-state changes against core source. Updates `manifest.json`'s `core_sha`, repository/skill versions and installation-doc check date; updates skill metadata versions and instructions. Rechecks the official app, Code and API docs cited above.
-3. Refreshes manifest ZIP hashes, validates, runs guard/package tests, builds six ZIPs and reviews checksums and bundle contents. Gets CI green on the reviewed PR/commit.
+3. Refreshes manifest ZIP hashes, validates, runs guard/package tests, builds one ZIP per skill and reviews checksums and bundle contents. Gets CI green on the reviewed PR/commit.
 4. A maintainer merges, changes visibility when ready, and separately publishes the reviewed version with one ZIP per skill, the build manifest and checksums. This repository has no automated tagging or GitHub release workflow.
 
 Versioning policy: patch for compatible corrections, minor for additive capabilities, major for incompatible tool/install/output contracts. Publishing or downloading a bundle never installs it in an account, enables an MCP connection or authorizes writes.

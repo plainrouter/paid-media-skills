@@ -22,6 +22,12 @@ from markdown_parse import markdown_literals, parse_markdown
 RETIRED_TOOLS = frozenset({'generate_background', 'get_generation',
                            'launcher.execute_batch', 'resume_generation'})
 
+# Reviewed third-party tools are separate from the pinned Plainrouter lock.
+# Client prefixes are resolved at discovery, never added to this inventory.
+EXTERNAL_TOOLS = {'ads_library_search': {'provider': 'Meta Ads MCP', 'effect': 'read'}}
+META_WRITE_TOOLS = frozenset({'ads_activate_entity', 'ads_boost_ig_post'})
+META_WRITE_PREFIXES = ('ads_create_', 'ads_update_', 'ads_delete_')
+
 FIELDS = {'name', 'description', 'license', 'compatibility', 'metadata'}
 TOOL_PREFIX = re.compile(r'(?:get_|list_|verify_|submit_|dry_run_|revoke_|actions\.|launch\.|launcher\.)[a-z0-9_.-]+\Z')
 PUNCTUATION_ESCAPE = re.compile(r'\\([' + re.escape(string.punctuation) + r'])')
@@ -41,6 +47,9 @@ FORMAT_CHARACTERS = {value: None for value in range(sys.maxunicode + 1)
                      if unicodedata.category(chr(value)) == 'Cf'}
 MARKUP_GAP = r'[*_~`]*'
 LETTER_DIGIT = r'[^\W_]'
+META_WRITE_PATTERNS = [(prefix, re.compile(r'(?<!' + LETTER_DIGIT + r')' +
+                       MARKUP_GAP.join(re.escape(char) for char in prefix) +
+                       MARKUP_GAP + r'([a-z0-9_.-]*)')) for prefix in META_WRITE_PREFIXES]
 
 ASCII_INVALID = re.compile(r'[^\x20-\x7e\n\t]')
 
@@ -223,7 +232,9 @@ def value_references(source, names):
     # Casefolded copies are retained in the shared stream as well. Matching is
     # case-insensitive, while decoded values remain intact for ASCII checking.
     source = source.casefold()
-    references = text_references(source, names, markup=True)
+    references = text_references(source, names | META_WRITE_TOOLS, markup=True)
+    for prefix, pattern in META_WRITE_PATTERNS:
+        references.update(prefix + match[1] for match in pattern.finditer(source))
     references.update(re.findall(r'tool\[([^]\s]+)\]', source))
     for token in re.findall(r'(?:call|use|invoke)\s+`([^`]+)`', source):
         if TOOL_PREFIX.fullmatch(token) and token != 'actions.propose':
@@ -357,7 +368,9 @@ def validate(root):
     root = Path(root)
     tools, manifest = contract((root / 'tools.lock.json').read_text(), (root / 'manifest.json').read_text())
     errors, documents = [], {}
-    tool_names = frozenset(tools)
+    for name in sorted(set(tools) & set(EXTERNAL_TOOLS)):
+        errors.append('tools.lock.json: external tool collides with locked tool: ' + name)
+    tool_names = frozenset(tools) | frozenset(EXTERNAL_TOOLS)
     entries = manifest['skills']
     if {p.name for p in (root / 'skills').iterdir() if p.is_dir()} != {entry['name'] for entry in entries}:
         errors.append('manifest.json: skill folders differ from manifest')
@@ -385,7 +398,12 @@ def validate(root):
             documents[entry['name']].append((path, source, references))
             _, _, reference_lines = inspection_result(source, frozenset(tool_names))
             for name in sorted(references):
-                if name not in tools:
+                if name in META_WRITE_TOOLS or name.startswith(META_WRITE_PREFIXES):
+                    errors.append(str(path.relative_to(root)) + ': forbidden tool reference: ' + name)
+                elif name in EXTERNAL_TOOLS:
+                    if EXTERNAL_TOOLS[name]['effect'] != 'read':
+                        errors.append(str(path.relative_to(root)) + ': external tool must have read effect: ' + name)
+                elif name not in tools:
                     errors.append(str(path.relative_to(root)) + ': tool absent from tools.lock.json: ' + name)
                     for referenced_name, line in reference_lines:
                         if referenced_name == name:
@@ -430,6 +448,14 @@ def validate(root):
             declared = metadata.get('tools', '').split()
             if not declared or len(set(declared)) != len(declared):
                 raise ValueError('Invalid declared tool inventory')
+            external = metadata.get('external-tools', '').split()
+            if ('external-tools' in metadata and not external) or len(set(external)) != len(external):
+                raise ValueError('Invalid declared external tool inventory')
+            for tool in external:
+                if tool not in EXTERNAL_TOOLS:
+                    raise ValueError('External tool not allowlisted: ' + tool)
+                if EXTERNAL_TOOLS[tool]['effect'] != 'read':
+                    raise ValueError('External tool must have read effect: ' + tool)
             if 'tools/list' not in body:
                 raise ValueError('Discover tools/list before using tools')
             references = referenced_tools(body, tool_names)
@@ -447,8 +473,8 @@ def validate(root):
                     target = (document.parent / link.split('#', 1)[0]).resolve()
                     if not target.is_relative_to(folder.resolve()) or not target.is_file():
                         errors.append(name + ': missing or out-of-bundle reference: ' + link)
-            if references != set(declared):
-                errors.append(name + ': workflow references differ from metadata.tools')
+            if references != set(declared) | set(external):
+                errors.append(name + ': workflow references differ from metadata.tools and metadata.external-tools')
             for tool in declared:
                 if tool not in tools:
                     errors.append(name + ': tool absent from tools.lock.json: ' + tool)

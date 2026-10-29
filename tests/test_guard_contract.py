@@ -22,7 +22,7 @@ class GuardContractTest(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix='skill-guard-')
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / 'repo'
-        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns('.git', 'dist', '__pycache__', 'reports'))
+        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns('.git', '.venv', 'dist', '__pycache__', 'reports'))
         self.lock = json.loads((self.root / 'tools.lock.json').read_text())
         self.tools = {item['name']: item for item in self.lock['tools']}
         self.manifest = json.loads((self.root / 'manifest.json').read_text())
@@ -48,6 +48,13 @@ class GuardContractTest(unittest.TestCase):
 
     def test_unmodified_bundles_pass(self):
         self.assertEqual([], validate(self.root))
+        research = (self.root / 'skills/plainrouter-ad-research/SKILL.md').read_text()
+        for required in [
+            '### Competitor activity (published by Meta)',
+            '### Your results (counted by Plainrouter)',
+            "Ad Library figures are published by Meta. Plainrouter has not counted these figures. Plainrouter counts the customer's own arrivals and conversions separately; competitor results are unavailable.",
+        ]:
+            self.assertIn(required, research)
         # Literal comparisons remain prose in every original document.
         for path in (self.root / 'skills').rglob('*.md'):
             path.write_text(path.read_text() + '\nReport when spend < budget.\n')
@@ -57,6 +64,38 @@ class GuardContractTest(unittest.TestCase):
         result = referenced_tools('get_action_batch', set(self.tools))
         self.assertIn('get_action_batch', result)
         self.assertNotIn('get_action', result)
+
+    def test_reviewed_external_tool_contract(self):
+        """External discovery is explicit and cannot launder locked writes."""
+        path = self.root / 'skills/plainrouter-counted-brief/SKILL.md'
+        original = path.read_text()
+        declared = original.replace('"tools": "', '"external-tools": "ads_library_search", "tools": "')
+        path.write_text(declared + '\nUse `ads_library_search` through its discovered schema.\n')
+        self.assertEqual([], validate(self.root))
+        cases = [
+            ('undeclared', original + '\nUse `ads_library_search`.\n', 'workflow references differ'),
+            ('unknown', declared.replace('ads_library_search', 'unreviewed_search'), 'External tool not allowlisted: unreviewed_search'),
+            ('locked write', declared.replace('ads_library_search', 'submit_feedback'), 'forbidden tool reference: submit_feedback'),
+            ('wrong inventory', original.replace('"tools": "', '"tools": "ads_library_search ') + '\nUse `ads_library_search`.\n', 'tool absent from tools.lock.json: ads_library_search'),
+            ('duplicate', declared.replace('ads_library_search', 'ads_library_search ads_library_search'), 'Invalid declared external tool inventory'),
+            ('Meta create', original + '\nads_create_campaign\n', 'forbidden tool reference: ads_create_campaign'),
+            ('Meta update', original + '\nads_update_ad\n', 'forbidden tool reference: ads_update_ad'),
+            ('Meta delete', original + '\nads_delete_ad\n', 'forbidden tool reference: ads_delete_ad'),
+            ('Meta activate', original + '\nads_activate_entity\n', 'forbidden tool reference: ads_activate_entity'),
+            ('Meta boost', original + '\nads_boost_ig_post\n', 'forbidden tool reference: ads_boost_ig_post'),
+            ('Meta markup', original + '\n`ads_cre**ate**_campaign`\n', 'forbidden tool reference: ads_create_campaign'),
+        ]
+        for label, source, diagnostic in cases:
+            with self.subTest(external=label):
+                path.write_text(source)
+                self.assertIn(diagnostic, '\n'.join(validate(self.root)))
+        path.write_text(original + '\nads_update_ad\n')
+        misclassified = dict(self.tools['get_account_state'], name='ads_update_ad', grant_operation='ads_update_ad')
+        (self.root / 'tools.lock.json').write_text(json.dumps(dict(self.lock, tools=self.lock['tools'] + [misclassified])))
+        self.assertIn('forbidden tool reference: ads_update_ad', '\n'.join(validate(self.root)))
+        collision = dict(self.tools['submit_feedback'], name='ads_library_search', grant_operation='ads_library_search')
+        (self.root / 'tools.lock.json').write_text(json.dumps(dict(self.lock, tools=self.lock['tools'] + [collision])))
+        self.assertIn('external tool collides with locked tool: ads_library_search', '\n'.join(validate(self.root)))
 
     def test_creative_store_inside_store_from_url_is_not_a_reference(self):
         result = referenced_tools('launch.creatives.store-from-url', set(self.tools))
@@ -208,7 +247,7 @@ class GuardContractTest(unittest.TestCase):
         first_dir = Path(self.temp.name) / 'first'
         first = build(self.root, first_dir)
         self.assertEqual(first, build(self.root, Path(self.temp.name) / 'second'))
-        self.assertEqual(6, len(first))
+        self.assertEqual(7, len(first))
         for item in first:
             path = first_dir / item['file']
             self.assertEqual(item['bytes'], path.stat().st_size)
